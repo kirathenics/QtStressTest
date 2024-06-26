@@ -11,25 +11,60 @@
 #include <QtMath>
 #include <QRandomGenerator>
 
+#include <QThreadPool>
+#include <QThread>
+#include <QThreadPool>
+#include <QRunnable>
+#include <QAtomicInt>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class StressTestApp; }
 QT_END_NAMESPACE
 
 
-class CPUStressTester : public QThread {
+class CPURunnable : public QRunnable {
 public:
+    CPURunnable(QAtomicInt* stopFlag) : stopFlag(stopFlag) {}
     void run() override {
-        qDebug() << "Starting CPU stress test";
+        qDebug() << "Starting CPU stress test on thread" << QThread::currentThread();
         double result = 0;
-        while (!isInterruptionRequested()) {
+        while (!stopFlag->loadAcquire()) {
             for (int i = 0; i < 1000000; ++i) {
                 result += qSin(QRandomGenerator::global()->generate());
             }
-            QThread::msleep(10); // Имитация нагрузки
         }
-        qDebug() << "CPU stress test stopped";
+        qDebug() << "CPU stress test stopped on thread" << QThread::currentThread();
     }
+
+private:
+    QAtomicInt* stopFlag;
 };
+
+class CPUCoresStressTester {
+public:
+    CPUCoresStressTester() : stopFlag(0) {}
+    void start();
+    void stop();
+
+private:
+    QThreadPool threadPool;
+    QAtomicInt stopFlag;
+};
+
+//class CPUStressTester : public QThread {
+//public:
+//    void run() override {
+//        qDebug() << "Starting CPU stress test";
+//        double result = 0;
+//        while (!isInterruptionRequested()) {
+//            for (int i = 0; i < 1000000; ++i) {
+//                result += qSin(QRandomGenerator::global()->generate());
+//            }
+//            QThread::msleep(10); // Имитация нагрузки
+//        }
+//        qDebug() << "CPU stress test stopped";
+//    }
+//};
 
 class FPUStressTester : public QThread {
 public:
@@ -64,7 +99,8 @@ private:
     QTimer* timer;
     QTime* time;
 
-    CPUStressTester* cpuStressTester;
+    CPUCoresStressTester cpuStressTester;
+//    CPUStressTester* cpuStressTester;
     FPUStressTester* fpuStressTester;
 
     void updateCurrentDateTime();

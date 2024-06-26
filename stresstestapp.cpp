@@ -5,7 +5,7 @@
 StressTestApp::StressTestApp(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::StressTestApp)
-    , cpuStressTester(nullptr)
+    //, cpuStressTester(nullptr)
     , fpuStressTester(nullptr)
 {
     ui->setupUi(this);
@@ -24,11 +24,12 @@ StressTestApp::StressTestApp(QWidget *parent)
 
 StressTestApp::~StressTestApp()
 {
-    if (cpuStressTester) {
-        cpuStressTester->requestInterruption();
-        cpuStressTester->wait();
-        delete cpuStressTester;
-    }
+//    if (cpuStressTester) {
+//        cpuStressTester->requestInterruption();
+//        cpuStressTester->wait();
+//        delete cpuStressTester;
+//    }
+    cpuStressTester.stop();
     if (fpuStressTester) {
         fpuStressTester->requestInterruption();
         fpuStressTester->wait();
@@ -84,14 +85,17 @@ void StressTestApp::on_start_pushButton_clicked()
 
     startOrResumeTimer();
 
+//    if (ui->cpu_checkBox->isChecked()) {
+//        if (cpuStressTester) {
+//            cpuStressTester->requestInterruption();
+//            cpuStressTester->wait();
+//            delete cpuStressTester;
+//        }
+//        cpuStressTester = new CPUStressTester();
+//        cpuStressTester->start();
+//    }
     if (ui->cpu_checkBox->isChecked()) {
-        if (cpuStressTester) {
-            cpuStressTester->requestInterruption();
-            cpuStressTester->wait();
-            delete cpuStressTester;
-        }
-        cpuStressTester = new CPUStressTester();
-        cpuStressTester->start();
+        cpuStressTester.start();
     }
     if (ui->fpu_checkBox->isChecked()) {
         if (fpuStressTester) {
@@ -111,12 +115,14 @@ void StressTestApp::on_stop_pushButton_clicked()
         ui->start_pushButton->setEnabled(true);
         stopTimer();
 
-        if (cpuStressTester) {
-            cpuStressTester->requestInterruption();
-            cpuStressTester->wait();
-            delete cpuStressTester;
-            cpuStressTester = nullptr;
-        }
+//        if (cpuStressTester) {
+//            cpuStressTester->requestInterruption();
+//            cpuStressTester->wait();
+//            delete cpuStressTester;
+//            cpuStressTester = nullptr;
+//        }
+        cpuStressTester.stop();
+
         if (fpuStressTester) {
             fpuStressTester->requestInterruption();
             fpuStressTester->wait();
@@ -124,5 +130,19 @@ void StressTestApp::on_stop_pushButton_clicked()
             fpuStressTester = nullptr;
         }
     }
+}
+
+void CPUCoresStressTester::start() {
+    stopFlag.fetchAndStoreRelaxed(0);
+    int numCores = QThread::idealThreadCount();
+    for (int i = 0; i < numCores; ++i) {
+        CPURunnable* task = new CPURunnable(&stopFlag);
+        threadPool.start(task);
+    }
+}
+
+void CPUCoresStressTester::stop() {
+    stopFlag.fetchAndStoreRelaxed(1);
+    threadPool.waitForDone();
 }
 
