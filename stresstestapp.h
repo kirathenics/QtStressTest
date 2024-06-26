@@ -117,27 +117,52 @@ public:
     }
 };
 
+//class RAMStressTester : public QThread {
+//public:
+//    void run() override {
+//        MEMORYSTATUSEX status;
+//        status.dwLength = sizeof(status);
+//        GlobalMemoryStatusEx(&status);
+//        unsigned long long totalMemory = status.ullTotalPhys;
+//        unsigned long long availableMemory = status.ullAvailPhys;
+
+//        qDebug() << "Starting RAM stress test for available memory size" << availableMemory << "bytes";
+
+//        if (totalMemory <= 0) {
+//            qDebug() << "Error! Unable to determine total memory size!";
+//            return;
+//        }
+
+//        char* data = new char[availableMemory];
+//        for (unsigned long long i = 0; i < availableMemory; ++i) {
+//            data[i] = rand() % 256;
+//        }
+//        delete[] data;
+
+//        qDebug() << "RAM stress test stopped";
+//    }
+//};
+
+
 class RAMStressTester : public QThread {
 public:
     void run() override {
-        MEMORYSTATUSEX status;
-        status.dwLength = sizeof(status);
-        GlobalMemoryStatusEx(&status);
-        unsigned long long totalMemory = status.ullTotalPhys;
-        unsigned long long availableMemory = status.ullAvailPhys;
+        qDebug() << "Starting RAM stress test";
+        const int arraySize = 1024 * 1024 * 100; // 100 MB
 
-        qDebug() << "Starting RAM stress test for available memory size" << availableMemory << "bytes";
+        while (!isInterruptionRequested()) {
+            int* array = new int[arraySize];
 
-        if (totalMemory <= 0) {
-            qDebug() << "Error! Unable to determine total memory size!";
-            return;
+            for (int i = 0; i < arraySize; ++i) {
+                array[i] = QRandomGenerator::global()->generate();
+            }
+            for (int i = 0; i < arraySize; ++i) {
+                array[i] ^= QRandomGenerator::global()->generate();
+            }
+            QThread::msleep(10); // Имитация нагрузки
+
+            delete[] array;
         }
-
-        char* data = new char[availableMemory];
-        for (unsigned long long i = 0; i < availableMemory; ++i) {
-            data[i] = rand() % 256;
-        }
-        delete[] data;
 
         qDebug() << "RAM stress test stopped";
     }
