@@ -19,6 +19,14 @@
 
 #include <windows.h>
 #include <vector>
+#include <QStorageInfo>
+
+
+#include <QOpenGLFunctions>
+#include <QOpenGLContext>
+#include <QOffscreenSurface>
+#include <QDebug>
+//#include <GL/glew.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class StressTestApp; }
@@ -168,45 +176,150 @@ public:
     }
 };
 
+//class LocalDiskStressTester : public QThread {
+//public:
+//    void run() override {
+//        // Получаем список всех локальных дисков
+//        std::vector<QString> drives;
+//        DWORD drivesMask = GetLogicalDrives();
+//        for (char i = 'A'; i <= 'Z'; ++i) {
+//            if (drivesMask & 1) {
+//                QString drive = QString(i) + ":/";
+//                drives.push_back(drive);
+//            }
+//            drivesMask >>= 1;
+//        }
+
+//        // Проходимся по каждому диску и тестируем его
+//        for (const QString& drive : drives) {
+//            qDebug() << "Starting disk stress test for drive" << drive;
+
+//            // Открываем диск для записи
+//            //HANDLE hDrive = CreateFile(drive.toStdWString().c_str(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+//            HANDLE hDrive = CreateFile(drive.toStdWString().c_str(), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+//            if (hDrive == INVALID_HANDLE_VALUE) {
+//                qDebug() << "Unable to open drive for write" << drive;
+//                continue;
+//            }
+
+//            // Генерируем и записываем тестовые данные на диск
+//            const int dataSize = 1024 * 1024; // 1 MB
+//            std::vector<char> data(dataSize, 0);
+//            DWORD bytesWritten;
+//            if (!WriteFile(hDrive, data.data(), dataSize, &bytesWritten, NULL)) {
+//                qDebug() << "Error writing test data to drive" << drive;
+//            }
+
+//            // Закрываем диск
+//            CloseHandle(hDrive);
+
+//            qDebug() << "Disk stress test for drive" << drive << "stopped";
+//        }
+//    }
+//};
+
 class LocalDiskStressTester : public QThread {
 public:
     void run() override {
-        // Получаем список всех локальных дисков
-        std::vector<QString> drives;
-        DWORD drivesMask = GetLogicalDrives();
-        for (char i = 'A'; i <= 'Z'; ++i) {
-            if (drivesMask & 1) {
-                QString drive = QString(i) + ":/";
-                drives.push_back(drive);
+        qDebug() << "Starting Disk stress test";
+
+        QList<QStorageInfo> storageList = QStorageInfo::mountedVolumes();
+        foreach (QStorageInfo storage, storageList) {
+            if (storage.isValid() && storage.isReady() && !storage.isReadOnly()) {
+                QDir testDir(storage.rootPath() + "/StressTest");
+                if (!testDir.exists()) {
+                    testDir.mkpath(".");
+                }
+                qDebug() << "Starting disk stress test for drive" << storage.rootPath();
+                stressTestDisk(testDir.absolutePath());
+                qDebug() << "Disk stress test for drive" << storage.rootPath() << "completed";
+
+                // Удаление тестовой папки после завершения теста
+                if (testDir.exists()) {
+                    if (!testDir.removeRecursively()) {
+                        qDebug() << "Failed to remove test directory:" << testDir.absolutePath();
+                    }
+                }
             }
-            drivesMask >>= 1;
         }
 
-        // Проходимся по каждому диску и тестируем его
-        for (const QString& drive : drives) {
-            qDebug() << "Starting disk stress test for drive" << drive;
+        qDebug() << "Disk stress test completed";
+    }
 
-            // Открываем диск для записи
-            //HANDLE hDrive = CreateFile(drive.toStdWString().c_str(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
-            HANDLE hDrive = CreateFile(drive.toStdWString().c_str(), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-            if (hDrive == INVALID_HANDLE_VALUE) {
-                qDebug() << "Unable to open drive for write" << drive;
-                continue;
+private:
+    void stressTestDisk(const QString& path) {
+        const qint64 fileSize = 1024 * 1024 * 10; // 10 MB
+        const QString testFileName = path + "/stress_test_file.bin";
+
+        QFile testFile(testFileName);
+
+        while (!isInterruptionRequested()) {
+            // Write test
+            if (testFile.open(QIODevice::WriteOnly)) {
+                QByteArray data(fileSize, 'A');
+                testFile.write(data);
+                testFile.close();
+            } else {
+                qDebug() << "Failed to open file for writing:" << testFileName;
+                return;
             }
 
-            // Генерируем и записываем тестовые данные на диск
-            const int dataSize = 1024 * 1024; // 1 MB
-            std::vector<char> data(dataSize, 0);
-            DWORD bytesWritten;
-            if (!WriteFile(hDrive, data.data(), dataSize, &bytesWritten, NULL)) {
-                qDebug() << "Error writing test data to drive" << drive;
+            // Read test
+            if (testFile.open(QIODevice::ReadOnly)) {
+                testFile.readAll();
+                testFile.close();
+            } else {
+                qDebug() << "Failed to open file for reading:" << testFileName;
+                return;
             }
 
-            // Закрываем диск
-            CloseHandle(hDrive);
+            // Delete test file
+            if (!testFile.remove()) {
+                qDebug() << "Failed to delete test file:" << testFileName;
+                return;
+            }
 
-            qDebug() << "Disk stress test for drive" << drive << "stopped";
+            QThread::msleep(10); // Имитация нагрузки
         }
+    }
+};
+
+
+
+class GPUStressTester : public QThread, protected QOpenGLFunctions {
+public:
+    void run() override {
+        QOpenGLContext context;
+        context.create();
+        if (!context.isValid()) {
+            qDebug() << "Failed to create OpenGL context";
+            return;
+        }
+
+        QOffscreenSurface surface;
+        surface.create();
+        if (!surface.isValid()) {
+            qDebug() << "Failed to create offscreen surface";
+            return;
+        }
+
+        context.makeCurrent(&surface);
+        initializeOpenGLFunctions();
+
+        qDebug() << "Starting GPU stress test";
+        while (!isInterruptionRequested()) {
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            for (int i = 0; i < 100000; ++i) {
+                glBegin(GL_TRIANGLES);
+                glVertex2f(-0.5f, -0.5f);
+                glVertex2f(0.5f, -0.5f);
+                glVertex2f(0.0f, 0.5f);
+                glEnd();
+            }
+            context.swapBuffers(&surface);
+            QThread::msleep(10); // Имитация нагрузки
+        }
+        qDebug() << "GPU stress test stopped";
     }
 };
 
@@ -235,6 +348,7 @@ private:
     CacheStressTester* cacheStressTester;
     RAMStressTester* ramStressTester;
     LocalDiskStressTester* localDiskStressTester;
+    GPUStressTester *gpuStressTester;
 
     void updateCurrentDateTime();
     void startOrResumeTimer();

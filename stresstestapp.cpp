@@ -10,6 +10,7 @@ StressTestApp::StressTestApp(QWidget *parent)
     , cacheStressTester(nullptr)
     , ramStressTester(nullptr)
     , localDiskStressTester(nullptr)
+    , gpuStressTester(nullptr)
 {
     ui->setupUi(this);
 
@@ -24,7 +25,8 @@ StressTestApp::StressTestApp(QWidget *parent)
     ui->fpu_checkBox->setChecked(false);
     ui->cache_checkBox->setChecked(false);
     ui->ram_checkBox->setChecked(false);
-    ui->localDisk_checkBox->setChecked(true);
+    ui->localDisk_checkBox->setChecked(false);
+    ui->gpu_checkBox->setChecked(true);
 
     ui->stop_pushButton->setEnabled(false);
 
@@ -63,6 +65,12 @@ StressTestApp::~StressTestApp()
         localDiskStressTester->requestInterruption();
         localDiskStressTester->wait();
         delete localDiskStressTester;
+    }
+
+    if (gpuStressTester) {
+        gpuStressTester->requestInterruption();
+        gpuStressTester->wait();
+        delete gpuStressTester;
     }
 
     delete ui;
@@ -167,6 +175,16 @@ void StressTestApp::on_start_pushButton_clicked()
         localDiskStressTester = new LocalDiskStressTester();
         localDiskStressTester->start();
     }
+
+    if (ui->gpu_checkBox->isChecked()) {
+        if (gpuStressTester) {
+            gpuStressTester->requestInterruption();
+            gpuStressTester->wait();
+            delete gpuStressTester;
+        }
+        gpuStressTester = new GPUStressTester();
+        gpuStressTester->start();
+    }
 }
 
 
@@ -211,6 +229,13 @@ void StressTestApp::on_stop_pushButton_clicked()
         localDiskStressTester->wait();
         delete localDiskStressTester;
         localDiskStressTester = nullptr;
+    }
+
+    if (gpuStressTester) {
+        gpuStressTester->requestInterruption();
+        gpuStressTester->wait();
+        delete gpuStressTester;
+        gpuStressTester = nullptr;
     }
 }
 
