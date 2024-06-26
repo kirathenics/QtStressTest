@@ -71,9 +71,9 @@
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>137</x>
+      <x>127</x>
       <y>319</y>
-      <width>551</width>
+      <width>561</width>
       <height>41</height>
      </rect>
     </property>
@@ -102,7 +102,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Начался:</string>
+        <string>Тест начался:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -112,7 +112,7 @@
      <item>
       <widget class="QLabel" name="currentDateTime_label">
        <property name="text">
-        <string>currentDateTime</string>
+        <string/>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -122,7 +122,7 @@
      <item>
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Прошло:</string>
+        <string>Прошло времени:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

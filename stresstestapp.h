@@ -197,6 +197,7 @@ public:
 private slots:
     void on_start_pushButton_clicked();
     void on_stop_pushButton_clicked();
+    void on_clear_pushButton_clicked();
 
 private:
     Ui::StressTestApp *ui;

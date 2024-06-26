@@ -13,6 +13,7 @@ StressTestApp::StressTestApp(QWidget *parent)
 {
     ui->setupUi(this);
 
+    ui->currentDateTime_label->setText("");
     ui->timer_label->setText("00:00:00");
 
     timer = new QTimer(this);
@@ -24,6 +25,8 @@ StressTestApp::StressTestApp(QWidget *parent)
     ui->cache_checkBox->setChecked(false);
     ui->ram_checkBox->setChecked(false);
     ui->localDisk_checkBox->setChecked(true);
+
+    ui->stop_pushButton->setEnabled(false);
 
     connect(timer, &QTimer::timeout, this, &StressTestApp::updateTimerLabel);
 }
@@ -106,6 +109,7 @@ void StressTestApp::on_start_pushButton_clicked()
     //qDebug() << "Нажато!";
 
     ui->start_pushButton->setEnabled(false);
+    ui->stop_pushButton->setEnabled(true);
 
     updateCurrentDateTime();
 
@@ -168,46 +172,57 @@ void StressTestApp::on_start_pushButton_clicked()
 
 void StressTestApp::on_stop_pushButton_clicked()
 {
-    if (!ui->start_pushButton->isEnabled()) {
-        ui->start_pushButton->setEnabled(true);
-        stopTimer();
+    ui->start_pushButton->setEnabled(true);
+    ui->stop_pushButton->setEnabled(false);
+    stopTimer();
 
-//        if (cpuStressTester) {
-//            cpuStressTester->requestInterruption();
-//            cpuStressTester->wait();
-//            delete cpuStressTester;
-//            cpuStressTester = nullptr;
-//        }
+    //        if (cpuStressTester) {
+    //            cpuStressTester->requestInterruption();
+    //            cpuStressTester->wait();
+    //            delete cpuStressTester;
+    //            cpuStressTester = nullptr;
+    //        }
 
-        cpuStressTester.stop();
+    cpuStressTester.stop();
 
-        if (fpuStressTester) {
-            fpuStressTester->requestInterruption();
-            fpuStressTester->wait();
-            delete fpuStressTester;
-            fpuStressTester = nullptr;
-        }
+    if (fpuStressTester) {
+        fpuStressTester->requestInterruption();
+        fpuStressTester->wait();
+        delete fpuStressTester;
+        fpuStressTester = nullptr;
+    }
 
-        if (cacheStressTester) {
-            cacheStressTester->requestInterruption();
-            cacheStressTester->wait();
-            delete cacheStressTester;
-            cacheStressTester = nullptr;
-        }
+    if (cacheStressTester) {
+        cacheStressTester->requestInterruption();
+        cacheStressTester->wait();
+        delete cacheStressTester;
+        cacheStressTester = nullptr;
+    }
 
-        if (ramStressTester) {
-            ramStressTester->requestInterruption();
-            ramStressTester->wait();
-            delete ramStressTester;
-            ramStressTester = nullptr;
-        }
+    if (ramStressTester) {
+        ramStressTester->requestInterruption();
+        ramStressTester->wait();
+        delete ramStressTester;
+        ramStressTester = nullptr;
+    }
 
-        if (localDiskStressTester) {
-            localDiskStressTester->requestInterruption();
-            localDiskStressTester->wait();
-            delete localDiskStressTester;
-            localDiskStressTester = nullptr;
-        }
+    if (localDiskStressTester) {
+        localDiskStressTester->requestInterruption();
+        localDiskStressTester->wait();
+        delete localDiskStressTester;
+        localDiskStressTester = nullptr;
+    }
+}
+
+void StressTestApp::on_clear_pushButton_clicked()
+{
+    //clear graphs
+    //clear logs
+
+    if (ui->start_pushButton->isEnabled()) {
+        ui->currentDateTime_label->setText("");
+        ui->timer_label->setText("00:00:00");
+        time = new QTime(0, 0, 0);
     }
 }
 
@@ -224,4 +239,7 @@ void CPUCoresStressTester::stop() {
     stopFlag.fetchAndStoreRelaxed(1);
     threadPool.waitForDone();
 }
+
+
+
 
