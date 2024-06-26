@@ -53,7 +53,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="localDisks_checkBox">
+      <widget class="QCheckBox" name="localDisk_checkBox">
        <property name="text">
         <string>Local disk(s)</string>
        </property>
