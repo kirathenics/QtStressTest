@@ -5,11 +5,11 @@
 StressTestApp::StressTestApp(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::StressTestApp)
-    //, cpuStressTester(nullptr)
+    , cpuStressTester(nullptr)
     , fpuStressTester(nullptr)
     , cacheStressTester(nullptr)
     , ramStressTester(nullptr)
-    , localDiskStressTester(nullptr)
+    , diskTesterManager(nullptr)
     , gpuStressTester(nullptr)
 {
     ui->setupUi(this);
@@ -25,8 +25,8 @@ StressTestApp::StressTestApp(QWidget *parent)
     ui->fpu_checkBox->setChecked(false);
     ui->cache_checkBox->setChecked(false);
     ui->ram_checkBox->setChecked(false);
-    ui->localDisk_checkBox->setChecked(false);
-    ui->gpu_checkBox->setChecked(true);
+    ui->localDisk_checkBox->setChecked(true);
+    ui->gpu_checkBox->setChecked(false);
 
     ui->stop_pushButton->setEnabled(false);
 
@@ -35,13 +35,10 @@ StressTestApp::StressTestApp(QWidget *parent)
 
 StressTestApp::~StressTestApp()
 {
-//    if (cpuStressTester) {
-//        cpuStressTester->requestInterruption();
-//        cpuStressTester->wait();
-//        delete cpuStressTester;
-//    }
-
-    cpuStressTester.stop();
+    if (cpuStressTester) {
+        cpuStressTester->stop();
+        delete cpuStressTester;
+    }
 
     if (fpuStressTester) {
         fpuStressTester->requestInterruption();
@@ -61,10 +58,9 @@ StressTestApp::~StressTestApp()
         delete ramStressTester;
     }
 
-    if (localDiskStressTester) {
-        localDiskStressTester->requestInterruption();
-        localDiskStressTester->wait();
-        delete localDiskStressTester;
+    if (diskTesterManager) {
+        diskTesterManager->stopAllTests();
+        delete diskTesterManager;
     }
 
     if (gpuStressTester) {
@@ -75,15 +71,6 @@ StressTestApp::~StressTestApp()
 
     delete ui;
 }
-
-
-//unsigned long long StressTestApp::FibonacciFunction(int n) {
-//    if (n <= 1) {
-//        return 1;
-//    }
-//    return FibonacciFunction(n - 1) + FibonacciFunction(n - 2);
-//}
-
 
 
 void StressTestApp::updateCurrentDateTime() {
@@ -123,17 +110,13 @@ void StressTestApp::on_start_pushButton_clicked()
 
     startOrResumeTimer();
 
-//    if (ui->cpu_checkBox->isChecked()) {
-//        if (cpuStressTester) {
-//            cpuStressTester->requestInterruption();
-//            cpuStressTester->wait();
-//            delete cpuStressTester;
-//        }
-//        cpuStressTester = new CPUStressTester();
-//        cpuStressTester->start();
-//    }
     if (ui->cpu_checkBox->isChecked()) {
-        cpuStressTester.start();
+        if (cpuStressTester) {
+            cpuStressTester->stop();
+            delete cpuStressTester;
+        }
+        cpuStressTester = new CPUStressTester();
+        cpuStressTester->start();
     }
 
     if (ui->fpu_checkBox->isChecked()) {
@@ -167,13 +150,12 @@ void StressTestApp::on_start_pushButton_clicked()
     }
 
     if (ui->localDisk_checkBox->isChecked()) {
-        if (localDiskStressTester) {
-            localDiskStressTester->requestInterruption();
-            localDiskStressTester->wait();
-            delete localDiskStressTester;
+        if (diskTesterManager) {
+            diskTesterManager->stopAllTests();
+            delete diskTesterManager;
         }
-        localDiskStressTester = new LocalDiskStressTester();
-        localDiskStressTester->start();
+        diskTesterManager = new DiskTesterManager();
+        diskTesterManager->startAllTests();
     }
 
     if (ui->gpu_checkBox->isChecked()) {
@@ -194,14 +176,11 @@ void StressTestApp::on_stop_pushButton_clicked()
     ui->stop_pushButton->setEnabled(false);
     stopTimer();
 
-    //        if (cpuStressTester) {
-    //            cpuStressTester->requestInterruption();
-    //            cpuStressTester->wait();
-    //            delete cpuStressTester;
-    //            cpuStressTester = nullptr;
-    //        }
-
-    cpuStressTester.stop();
+    if (cpuStressTester) {
+        cpuStressTester->stop();
+        delete cpuStressTester;
+        cpuStressTester = nullptr;
+    }
 
     if (fpuStressTester) {
         fpuStressTester->requestInterruption();
@@ -224,11 +203,10 @@ void StressTestApp::on_stop_pushButton_clicked()
         ramStressTester = nullptr;
     }
 
-    if (localDiskStressTester) {
-        localDiskStressTester->requestInterruption();
-        localDiskStressTester->wait();
-        delete localDiskStressTester;
-        localDiskStressTester = nullptr;
+    if (diskTesterManager) {
+        diskTesterManager->stopAllTests();
+        delete diskTesterManager;
+        diskTesterManager = nullptr;
     }
 
     if (gpuStressTester) {
@@ -241,8 +219,8 @@ void StressTestApp::on_stop_pushButton_clicked()
 
 void StressTestApp::on_clear_pushButton_clicked()
 {
-    //clear graphs
-    //clear logs
+    //TODO: clear graphs
+    //TODO: clear logs
 
     if (ui->start_pushButton->isEnabled()) {
         ui->currentDateTime_label->setText("");
@@ -250,21 +228,3 @@ void StressTestApp::on_clear_pushButton_clicked()
         time = new QTime(0, 0, 0);
     }
 }
-
-void CPUCoresStressTester::start() {
-    stopFlag.fetchAndStoreRelaxed(0);
-    int numCores = QThread::idealThreadCount();
-    for (int i = 0; i < numCores; ++i) {
-        CPURunnable* task = new CPURunnable(&stopFlag);
-        threadPool.start(task);
-    }
-}
-
-void CPUCoresStressTester::stop() {
-    stopFlag.fetchAndStoreRelaxed(1);
-    threadPool.waitForDone();
-}
-
-
-
-

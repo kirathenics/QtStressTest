@@ -1,41 +1,24 @@
 #ifndef STRESSTESTAPP_H
 #define STRESSTESTAPP_H
 
-#include <QMainWindow>
-#include <QDateTime>
-#include <QTimer>
-#include <QTime>
-
-#include <QThread>
-#include <QDebug>
-#include <QtMath>
-#include <QRandomGenerator>
-
-#include <QThreadPool>
-#include <QThread>
-#include <QThreadPool>
-#include <QRunnable>
-#include <QAtomicInt>
-
-#include <windows.h>
-#include <vector>
-#include <QStorageInfo>
-
-
-#include <QOpenGLFunctions>
-#include <QOpenGLContext>
-#include <QOffscreenSurface>
-#include <QDebug>
-//#include <GL/glew.h>
+#include "libs.h"
+#include "cpucorestresstester.h"
+#include "cpustresstester.h"
+#include "fpustresstester.h"
+#include "cachestresstester.h"
+#include "ramstresstester.h"
+#include "localdiskstresstester.h"
+#include "disktestermanager.h"
+#include "gpustresstester.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class StressTestApp; }
 QT_END_NAMESPACE
 
 
-class CPURunnable : public QRunnable {
+/*class CPUCoreStressTester : public QRunnable {
 public:
-    CPURunnable(QAtomicInt* stopFlag) : stopFlag(stopFlag) {}
+    CPUCoreStressTester(QAtomicInt* stopFlag) : stopFlag(stopFlag) {}
     void run() override {
         qDebug() << "Starting CPU stress test on thread" << QThread::currentThread();
         double result = 0;
@@ -49,35 +32,20 @@ public:
 
 private:
     QAtomicInt* stopFlag;
-};
+};*/
 
-class CPUCoresStressTester {
+/*class CPUStressTester {
 public:
-    CPUCoresStressTester() : stopFlag(0) {}
+    CPUStressTester() : stopFlag(0) {}
     void start();
     void stop();
 
 private:
     QThreadPool threadPool;
     QAtomicInt stopFlag;
-};
+};*/
 
-//class CPUStressTester : public QThread {
-//public:
-//    void run() override {
-//        qDebug() << "Starting CPU stress test";
-//        double result = 0;
-//        while (!isInterruptionRequested()) {
-//            for (int i = 0; i < 1000000; ++i) {
-//                result += qSin(QRandomGenerator::global()->generate());
-//            }
-//            QThread::msleep(10); // Имитация нагрузки
-//        }
-//        qDebug() << "CPU stress test stopped";
-//    }
-//};
-
-class FPUStressTester : public QThread {
+/*class FPUStressTester : public QThread {
 public:
     void run() override {
         qDebug() << "Starting FPU stress test";
@@ -90,9 +58,9 @@ public:
         }
         qDebug() << "FPU stress test stopped";
     }
-};
+};*/
 
-class CacheStressTester : public QThread {
+/*class CacheStressTester : public QThread {
 public:
     void run() override {
         int cacheSize = 0;
@@ -123,36 +91,9 @@ public:
 
         qDebug() << "Cache stress test stopped";
     }
-};
+};*/
 
-//class RAMStressTester : public QThread {
-//public:
-//    void run() override {
-//        MEMORYSTATUSEX status;
-//        status.dwLength = sizeof(status);
-//        GlobalMemoryStatusEx(&status);
-//        unsigned long long totalMemory = status.ullTotalPhys;
-//        unsigned long long availableMemory = status.ullAvailPhys;
-
-//        qDebug() << "Starting RAM stress test for available memory size" << availableMemory << "bytes";
-
-//        if (totalMemory <= 0) {
-//            qDebug() << "Error! Unable to determine total memory size!";
-//            return;
-//        }
-
-//        char* data = new char[availableMemory];
-//        for (unsigned long long i = 0; i < availableMemory; ++i) {
-//            data[i] = rand() % 256;
-//        }
-//        delete[] data;
-
-//        qDebug() << "RAM stress test stopped";
-//    }
-//};
-
-
-class RAMStressTester : public QThread {
+/*class RAMStressTester : public QThread {
 public:
     void run() override {
         qDebug() << "Starting RAM stress test";
@@ -174,79 +115,37 @@ public:
 
         qDebug() << "RAM stress test stopped";
     }
-};
+};*/
 
-//class LocalDiskStressTester : public QThread {
-//public:
-//    void run() override {
-//        // Получаем список всех локальных дисков
-//        std::vector<QString> drives;
-//        DWORD drivesMask = GetLogicalDrives();
-//        for (char i = 'A'; i <= 'Z'; ++i) {
-//            if (drivesMask & 1) {
-//                QString drive = QString(i) + ":/";
-//                drives.push_back(drive);
-//            }
-//            drivesMask >>= 1;
-//        }
-
-//        // Проходимся по каждому диску и тестируем его
-//        for (const QString& drive : drives) {
-//            qDebug() << "Starting disk stress test for drive" << drive;
-
-//            // Открываем диск для записи
-//            //HANDLE hDrive = CreateFile(drive.toStdWString().c_str(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
-//            HANDLE hDrive = CreateFile(drive.toStdWString().c_str(), GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-//            if (hDrive == INVALID_HANDLE_VALUE) {
-//                qDebug() << "Unable to open drive for write" << drive;
-//                continue;
-//            }
-
-//            // Генерируем и записываем тестовые данные на диск
-//            const int dataSize = 1024 * 1024; // 1 MB
-//            std::vector<char> data(dataSize, 0);
-//            DWORD bytesWritten;
-//            if (!WriteFile(hDrive, data.data(), dataSize, &bytesWritten, NULL)) {
-//                qDebug() << "Error writing test data to drive" << drive;
-//            }
-
-//            // Закрываем диск
-//            CloseHandle(hDrive);
-
-//            qDebug() << "Disk stress test for drive" << drive << "stopped";
-//        }
-//    }
-//};
-
-class LocalDiskStressTester : public QThread {
+/*class LocalDiskStressTester : public QThread {
+    Q_OBJECT
 public:
+    explicit LocalDiskStressTester(const QString &rootPath, QObject *parent = nullptr)
+        : QThread(parent), rootPath(rootPath) {}
+
     void run() override {
-        qDebug() << "Starting Disk stress test";
+        qDebug() << "Starting Disk stress test on" << rootPath;
 
-        QList<QStorageInfo> storageList = QStorageInfo::mountedVolumes();
-        foreach (QStorageInfo storage, storageList) {
-            if (storage.isValid() && storage.isReady() && !storage.isReadOnly()) {
-                QDir testDir(storage.rootPath() + "/StressTest");
-                if (!testDir.exists()) {
-                    testDir.mkpath(".");
-                }
-                qDebug() << "Starting disk stress test for drive" << storage.rootPath();
-                stressTestDisk(testDir.absolutePath());
-                qDebug() << "Disk stress test for drive" << storage.rootPath() << "completed";
+        QDir testDir(rootPath + "/StressTest");
+        if (!testDir.exists()) {
+            testDir.mkpath(".");
+        }
 
-                // Удаление тестовой папки после завершения теста
-                if (testDir.exists()) {
-                    if (!testDir.removeRecursively()) {
-                        qDebug() << "Failed to remove test directory:" << testDir.absolutePath();
-                    }
-                }
+        stressTestDisk(testDir.absolutePath());
+
+        // Удаление тестовой папки после завершения теста
+        if (testDir.exists()) {
+            if (!testDir.removeRecursively()) {
+                qDebug() << "Failed to remove test directory:" << testDir.absolutePath();
             }
         }
 
-        qDebug() << "Disk stress test completed";
+        qDebug() << "Disk stress test completed on" << rootPath;
     }
 
 private:
+    QString rootPath;
+
     void stressTestDisk(const QString& path) {
         const qint64 fileSize = 1024 * 1024 * 10; // 10 MB
         const QString testFileName = path + "/stress_test_file.bin";
@@ -282,11 +181,44 @@ private:
             QThread::msleep(10); // Имитация нагрузки
         }
     }
-};
+};*/
+
+/*class DiskTesterManager {
+public:
+    DiskTesterManager() = default;
+
+    ~DiskTesterManager() {
+        stopAllTests();
+    }
+
+    void startAllTests() {
+        stopAllTests(); // Останавливаем все ранее запущенные тесты дисков
+
+        QList<QStorageInfo> storageList = QStorageInfo::mountedVolumes();
+        foreach (QStorageInfo storage, storageList) {
+            if (storage.isValid() && storage.isReady() && !storage.isReadOnly()) {
+                LocalDiskStressTester* diskTester = new LocalDiskStressTester(storage.rootPath());
+                diskStressTesters.append(diskTester);
+                diskTester->start();
+            }
+        }
+    }
+
+    void stopAllTests() {
+        for (LocalDiskStressTester* tester : diskStressTesters) {
+            tester->requestInterruption();
+            tester->wait();
+            delete tester;
+        }
+        diskStressTesters.clear();
+    }
+
+private:
+    QList<LocalDiskStressTester*> diskStressTesters;
+};*/
 
 
-
-class GPUStressTester : public QThread, protected QOpenGLFunctions {
+/*class GPUStressTester : public QThread, protected QOpenGLFunctions {
 public:
     void run() override {
         QOpenGLContext context;
@@ -321,7 +253,7 @@ public:
         }
         qDebug() << "GPU stress test stopped";
     }
-};
+};*/
 
 
 class StressTestApp : public QMainWindow
@@ -342,19 +274,18 @@ private:
     QTimer* timer;
     QTime* time;
 
-    CPUCoresStressTester cpuStressTester;
-//    CPUStressTester* cpuStressTester;
+    //CPUStressTester cpuStressTester;
+    CPUStressTester* cpuStressTester;
     FPUStressTester* fpuStressTester;
     CacheStressTester* cacheStressTester;
     RAMStressTester* ramStressTester;
-    LocalDiskStressTester* localDiskStressTester;
+    DiskTesterManager* diskTesterManager;
     GPUStressTester *gpuStressTester;
 
     void updateCurrentDateTime();
     void startOrResumeTimer();
     void stopTimer();
     void updateTimerLabel();
-
-    //unsigned long long FibonacciFunction(int n);
 };
+
 #endif // STRESSTESTAPP_H
