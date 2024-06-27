@@ -25,8 +25,8 @@ StressTestApp::StressTestApp(QWidget *parent)
     ui->fpu_checkBox->setChecked(false);
     ui->cache_checkBox->setChecked(false);
     ui->ram_checkBox->setChecked(false);
-    ui->localDisk_checkBox->setChecked(true);
-    ui->gpu_checkBox->setChecked(false);
+    ui->localDisk_checkBox->setChecked(false);
+    ui->gpu_checkBox->setChecked(true);
 
     ui->stop_pushButton->setEnabled(false);
 
