@@ -18,6 +18,7 @@ SOURCES += \
     gpustresstester.cpp \
     localdiskstresstester.cpp \
     main.cpp \
+    qcustomplot.cpp \
     ramstresstester.cpp \
     stresstestapp.cpp
 
@@ -31,6 +32,7 @@ HEADERS += \
     gpustresstester.h \
     libs.h \
     localdiskstresstester.h \
+    qcustomplot.h \
     ramstresstester.h \
     stresstestapp.h
 
