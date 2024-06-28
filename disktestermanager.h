@@ -8,11 +8,11 @@ public:
     DiskTesterManager() = default;
 
     ~DiskTesterManager() {
-        stopAllTests();
+        stop();
     }
 
-    void startAllTests();
-    void stopAllTests();
+    void run();
+    void stop();
 
 private:
     QList<LocalDiskStressTester*> diskStressTesters;

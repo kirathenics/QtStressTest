@@ -30,7 +30,7 @@
 //};
 
 
-class RAMStressTester : public QThread {
+class RAMStressTester : public AbstractStressTester {
 public:
     void run() override;
 };

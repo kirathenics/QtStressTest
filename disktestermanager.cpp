@@ -1,7 +1,7 @@
 #include "disktestermanager.h"
 
-void DiskTesterManager::startAllTests() {
-    stopAllTests(); // Останавливаем все ранее запущенные тесты дисков
+void DiskTesterManager::run() {
+    stop(); // Останавливаем все ранее запущенные тесты дисков
 
     QList<QStorageInfo> storageList = QStorageInfo::mountedVolumes();
     foreach (QStorageInfo storage, storageList) {
@@ -13,10 +13,11 @@ void DiskTesterManager::startAllTests() {
     }
 }
 
-void DiskTesterManager::stopAllTests() {
+void DiskTesterManager::stop() {
     for (LocalDiskStressTester* tester : diskStressTesters) {
         tester->requestInterruption();
         tester->wait();
+        //tester->stop();
         delete tester;
     }
     diskStressTesters.clear();

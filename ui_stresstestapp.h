@@ -107,7 +107,7 @@ public:
 
         currentDateTime_label = new QLabel(horizontalLayoutWidget_2);
         currentDateTime_label->setObjectName(QString::fromUtf8("currentDateTime_label"));
-        currentDateTime_label->setMinimumSize(QSize(120, 0));
+        currentDateTime_label->setMinimumSize(QSize(125, 0));
         currentDateTime_label->setAlignment(Qt::AlignCenter);
 
         time_horizontalLayout->addWidget(currentDateTime_label);

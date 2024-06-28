@@ -51,6 +51,7 @@ void GPUStressTester::run() {
     shaderProgram.setAttributeBuffer(0, GL_FLOAT, 0, 3, 3 * sizeof(float));
 
     qDebug() << "Starting GPU stress test";
+
     while (!isInterruptionRequested()) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

@@ -11,7 +11,7 @@ public:
         stop();
     }
 
-    void start();
+    void run();
     void stop();
 
 private:

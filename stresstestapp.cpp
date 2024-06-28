@@ -72,7 +72,7 @@ StressTestApp::~StressTestApp()
     }
 
     if (diskTesterManager) {
-        diskTesterManager->stopAllTests();
+        diskTesterManager->stop();
         delete diskTesterManager;
     }
 
@@ -80,6 +80,10 @@ StressTestApp::~StressTestApp()
         gpuStressTester->requestInterruption();
         gpuStressTester->wait();
         delete gpuStressTester;
+    }
+
+    if (!ui->stop_pushButton->isEnabled()) {
+        qDebug() << "Program closed";
     }
 
     delete ui;
@@ -114,8 +118,6 @@ void StressTestApp::updateTimerLabel() {
 
 void StressTestApp::on_start_pushButton_clicked()
 {
-    //qDebug() << "Нажато!";
-
     ui->start_pushButton->setEnabled(false);
     ui->stop_pushButton->setEnabled(true);
 
@@ -123,13 +125,16 @@ void StressTestApp::on_start_pushButton_clicked()
 
     startOrResumeTimer();
 
+    qDebug() << "System test started";
+    addLogEntry("Тест системы начался!");
+
     if (ui->cpu_checkBox->isChecked()) {
         if (cpuStressTester) {
             cpuStressTester->stop();
             delete cpuStressTester;
         }
         cpuStressTester = new CPUStressTester();
-        cpuStressTester->start();
+        cpuStressTester->run();
     }
 
     if (ui->fpu_checkBox->isChecked()) {
@@ -165,11 +170,11 @@ void StressTestApp::on_start_pushButton_clicked()
 
     if (ui->localDisk_checkBox->isChecked()) {
         if (diskTesterManager) {
-            diskTesterManager->stopAllTests();
+            diskTesterManager->stop();
             delete diskTesterManager;
         }
         diskTesterManager = new DiskTesterManager();
-        diskTesterManager->startAllTests();
+        diskTesterManager->run();
     }
 
     if (ui->gpu_checkBox->isChecked()) {
@@ -181,8 +186,6 @@ void StressTestApp::on_start_pushButton_clicked()
         gpuStressTester = new GPUStressTester();
         gpuStressTester->start();
     }
-
-    addLogEntry("Тест системы начался!");
 }
 
 
@@ -221,7 +224,7 @@ void StressTestApp::on_stop_pushButton_clicked()
     }
 
     if (diskTesterManager) {
-        diskTesterManager->stopAllTests();
+        diskTesterManager->stop();
         delete diskTesterManager;
         diskTesterManager = nullptr;
     }
@@ -233,6 +236,7 @@ void StressTestApp::on_stop_pushButton_clicked()
         gpuStressTester = nullptr;
     }
 
+    qDebug() << "System test stopped";
     addLogEntry("Тест системы завершился!");
 }
 

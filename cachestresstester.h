@@ -3,7 +3,7 @@
 
 #include "libs.h"
 
-class CacheStressTester : public QThread {
+class CacheStressTester : public AbstractStressTester {
 public:
     void run() override;
 };

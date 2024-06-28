@@ -9,7 +9,7 @@
 #include <QOpenGLBuffer>
 #include <QOpenGLVertexArrayObject>
 
-class GPUStressTester : public QThread, protected QOpenGLFunctions {
+class GPUStressTester : public AbstractStressTester /*QThread*/, protected QOpenGLFunctions {
 public:
     void run() override;
 

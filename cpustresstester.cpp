@@ -1,6 +1,6 @@
 #include "cpustresstester.h"
 
-void CPUStressTester::start() {
+void CPUStressTester::run() {
     stopFlag.fetchAndStoreRelaxed(0);
     int numCores = QThread::idealThreadCount();
     for (int i = 0; i < numCores; ++i) {
