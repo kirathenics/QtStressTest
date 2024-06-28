@@ -1,0 +1,12 @@
+debug/cachestresstester.o
+debug/cpucorestresstester.o
+debug/cpustresstester.o
+debug/disktestermanager.o
+debug/fpustresstester.o
+debug/gpustresstester.o
+debug/localdiskstresstester.o
+debug/main.o
+debug/ramstresstester.o
+debug/stresstestapp.o
+debug/moc_localdiskstresstester.o
+debug/moc_stresstestapp.o

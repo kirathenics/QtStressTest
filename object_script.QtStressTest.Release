@@ -1,0 +1,12 @@
+release/cachestresstester.o
+release/cpucorestresstester.o
+release/cpustresstester.o
+release/disktestermanager.o
+release/fpustresstester.o
+release/gpustresstester.o
+release/localdiskstresstester.o
+release/main.o
+release/ramstresstester.o
+release/stresstestapp.o
+release/moc_localdiskstresstester.o
+release/moc_stresstestapp.o

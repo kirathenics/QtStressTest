@@ -14,6 +14,11 @@ StressTestApp::StressTestApp(QWidget *parent)
 {
     ui->setupUi(this);
 
+    ui->logs_tableWidget->setColumnCount(2);
+    QStringList tableHeaders;
+    tableHeaders << "Дата/Время" << "Событие";
+    ui->logs_tableWidget->setHorizontalHeaderLabels(tableHeaders);
+
     ui->currentDateTime_label->setText("");
     ui->timer_label->setText("00:00:00");
 
@@ -24,9 +29,9 @@ StressTestApp::StressTestApp(QWidget *parent)
     ui->cpu_checkBox->setChecked(false);
     ui->fpu_checkBox->setChecked(false);
     ui->cache_checkBox->setChecked(false);
-    ui->ram_checkBox->setChecked(false);
+    ui->ram_checkBox->setChecked(true);
     ui->localDisk_checkBox->setChecked(false);
-    ui->gpu_checkBox->setChecked(true);
+    ui->gpu_checkBox->setChecked(false);
 
     ui->stop_pushButton->setEnabled(false);
 
@@ -227,4 +232,16 @@ void StressTestApp::on_clear_pushButton_clicked()
         ui->timer_label->setText("00:00:00");
         time = new QTime(0, 0, 0);
     }
+}
+
+void StressTestApp::addLogEntry(const QString &action)
+{
+    int row = ui->logs_tableWidget->rowCount();
+    ui->logs_tableWidget->insertRow(row);
+
+    QTableWidgetItem *dateTimeItem = new QTableWidgetItem(QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss"));
+    QTableWidgetItem *actionItem = new QTableWidgetItem(action);
+
+    ui->logs_tableWidget->setItem(row, 0, dateTimeItem);
+    ui->logs_tableWidget->setItem(row, 1, actionItem);
 }
