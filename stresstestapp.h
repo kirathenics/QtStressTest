@@ -13,6 +13,7 @@
 
 #include <QTableWidgetItem>
 #include <QStringList>
+#include <QAbstractItemView>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class StressTestApp; }

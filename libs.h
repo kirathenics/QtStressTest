@@ -20,4 +20,6 @@
 #include <vector>
 #include <QStorageInfo>
 
+#include "abstractstresstester.h"
+
 #endif // LIBS_H

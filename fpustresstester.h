@@ -3,7 +3,17 @@
 
 #include "libs.h"
 
-class FPUStressTester : public QThread {
+//class FPUStressTester : public QThread {
+//public:
+//    void run() override;
+
+//    void stop() {
+//        this->requestInterruption();
+//        this->wait();
+//    }
+//};
+
+class FPUStressTester : public AbstractStressTester {
 public:
     void run() override;
 };

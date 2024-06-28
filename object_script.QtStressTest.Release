@@ -1,3 +1,4 @@
+release/abstractstresstester.o
 release/cachestresstester.o
 release/cpucorestresstester.o
 release/cpustresstester.o

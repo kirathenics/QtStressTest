@@ -20,7 +20,6 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
-#include <QtWidgets/QTableView>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -45,7 +44,6 @@ public:
     QLabel *currentDateTime_label;
     QLabel *elapsedTime_label;
     QLabel *timer_label;
-    QTableView *logs_tableView;
     QWidget *verticalLayoutWidget;
     QVBoxLayout *checkBoxes_verticalLayout;
     QCheckBox *cpu_checkBox;
@@ -126,9 +124,6 @@ public:
 
         time_horizontalLayout->addWidget(timer_label);
 
-        logs_tableView = new QTableView(centralwidget);
-        logs_tableView->setObjectName(QString::fromUtf8("logs_tableView"));
-        logs_tableView->setGeometry(QRect(330, 20, 412, 164));
         verticalLayoutWidget = new QWidget(centralwidget);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
         verticalLayoutWidget->setGeometry(QRect(70, 20, 191, 164));
@@ -167,7 +162,7 @@ public:
 
         logs_tableWidget = new QTableWidget(centralwidget);
         logs_tableWidget->setObjectName(QString::fromUtf8("logs_tableWidget"));
-        logs_tableWidget->setGeometry(QRect(350, 200, 256, 192));
+        logs_tableWidget->setGeometry(QRect(330, 20, 411, 171));
         StressTestApp->setCentralWidget(centralwidget);
         menubar = new QMenuBar(StressTestApp);
         menubar->setObjectName(QString::fromUtf8("menubar"));

@@ -18,6 +18,13 @@ StressTestApp::StressTestApp(QWidget *parent)
     QStringList tableHeaders;
     tableHeaders << "Дата/Время" << "Событие";
     ui->logs_tableWidget->setHorizontalHeaderLabels(tableHeaders);
+    ui->logs_tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    //ui->logs_tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->logs_tableWidget->setColumnWidth(0, 125);
+    ui->logs_tableWidget->setColumnWidth(1, 265);
+    //ui->logs_tableWidget->setVisible(false);
+    //ui->logs_tableWidget->resizeColumnToContents(1);
+    //ui->logs_tableWidget->setVisible(true);
 
     ui->currentDateTime_label->setText("");
     ui->timer_label->setText("00:00:00");
@@ -27,9 +34,9 @@ StressTestApp::StressTestApp(QWidget *parent)
     time = new QTime(0, 0, 0);
 
     ui->cpu_checkBox->setChecked(false);
-    ui->fpu_checkBox->setChecked(false);
+    ui->fpu_checkBox->setChecked(true);
     ui->cache_checkBox->setChecked(false);
-    ui->ram_checkBox->setChecked(true);
+    ui->ram_checkBox->setChecked(false);
     ui->localDisk_checkBox->setChecked(false);
     ui->gpu_checkBox->setChecked(false);
 
@@ -46,8 +53,9 @@ StressTestApp::~StressTestApp()
     }
 
     if (fpuStressTester) {
-        fpuStressTester->requestInterruption();
-        fpuStressTester->wait();
+        //fpuStressTester->requestInterruption();
+        //fpuStressTester->wait();
+        fpuStressTester->stop();
         delete fpuStressTester;
     }
 
@@ -126,8 +134,9 @@ void StressTestApp::on_start_pushButton_clicked()
 
     if (ui->fpu_checkBox->isChecked()) {
         if (fpuStressTester) {
-            fpuStressTester->requestInterruption();
-            fpuStressTester->wait();
+            //fpuStressTester->requestInterruption();
+            //fpuStressTester->wait();
+            fpuStressTester->stop();
             delete fpuStressTester;
         }
         fpuStressTester = new FPUStressTester();
@@ -172,6 +181,8 @@ void StressTestApp::on_start_pushButton_clicked()
         gpuStressTester = new GPUStressTester();
         gpuStressTester->start();
     }
+
+    addLogEntry("Тест системы начался!");
 }
 
 
@@ -188,8 +199,9 @@ void StressTestApp::on_stop_pushButton_clicked()
     }
 
     if (fpuStressTester) {
-        fpuStressTester->requestInterruption();
-        fpuStressTester->wait();
+        //fpuStressTester->requestInterruption();
+        //fpuStressTester->wait();
+        fpuStressTester->stop();
         delete fpuStressTester;
         fpuStressTester = nullptr;
     }
@@ -220,12 +232,14 @@ void StressTestApp::on_stop_pushButton_clicked()
         delete gpuStressTester;
         gpuStressTester = nullptr;
     }
+
+    addLogEntry("Тест системы завершился!");
 }
 
 void StressTestApp::on_clear_pushButton_clicked()
 {
     //TODO: clear graphs
-    //TODO: clear logs
+    ui->logs_tableWidget->setRowCount(0); // Очищаем таблицу логов
 
     if (ui->start_pushButton->isEnabled()) {
         ui->currentDateTime_label->setText("");

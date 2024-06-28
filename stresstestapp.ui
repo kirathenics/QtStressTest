@@ -128,16 +128,6 @@
      </item>
     </layout>
    </widget>
-   <widget class="QTableView" name="logs_tableView">
-    <property name="geometry">
-     <rect>
-      <x>330</x>
-      <y>20</y>
-      <width>412</width>
-      <height>164</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
@@ -195,10 +185,10 @@
    <widget class="QTableWidget" name="logs_tableWidget">
     <property name="geometry">
      <rect>
-      <x>350</x>
-      <y>200</y>
-      <width>256</width>
-      <height>192</height>
+      <x>330</x>
+      <y>20</y>
+      <width>411</width>
+      <height>171</height>
      </rect>
     </property>
    </widget>
