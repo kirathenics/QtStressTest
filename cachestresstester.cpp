@@ -15,11 +15,40 @@ void CacheStressTester::run() {
         );
 
     qDebug() << "Starting cache stress test for L1 cache size" << cacheSize << "KB";
+    /*using CPUInfo = SYSTEM_LOGICAL_PROCESSOR_INFORMATION;
+    DWORD len = 0;
+    CPUInfo* buffer = nullptr;
 
-    if (cacheSize <= 0) {
-        qDebug() << "Error! Unable to determine L1 cache size!";
-        return;
-    }
+    // Determine required length of a buffer
+    if ((GetLogicalProcessorInformation(buffer, &len) == FALSE) && (GetLastError() == ERROR_INSUFFICIENT_BUFFER))
+    {
+        // Allocate buffer of required size
+        buffer = new (std::nothrow) CPUInfo[len]{ };
+
+        if (buffer == nullptr)
+        {
+            qDebug() << "Buffer allocation of " << len << " bytes failed";
+        }
+        else if (GetLogicalProcessorInformation(buffer, &len) != FALSE)
+        {
+            const DWORD count = len / sizeof(CPUInfo);
+            for (DWORD i = 0; i < count; ++i)
+            {
+                // This will be true for multiple returned caches, we need just one
+                if (buffer[i].Relationship == RelationCache)
+                {
+                    qDebug() << "Cache line size is: " << buffer[i].Cache.LineSize << " bytes";
+                    break;
+                }
+            }
+        }
+        else
+        {
+            qDebug() << "ERROR: " << GetLastError();
+        }
+
+        delete[] buffer;
+    }*/
 
     char* data = new char[cacheSize * 1024];
     for (int i = 0; i < cacheSize * 1024; ++i) {
