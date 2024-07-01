@@ -6,7 +6,6 @@
 #include <QTimer>
 #include <QTime>
 
-#include <QThread>
 #include <QDebug>
 #include <QtMath>
 #include <QRandomGenerator>
@@ -15,6 +14,7 @@
 #include <QThread>
 #include <QRunnable>
 #include <QAtomicInt>
+#include <QProcess>
 
 #include <windows.h>
 #include <Windows.h>
@@ -22,8 +22,8 @@
 #include <QStorageInfo>
 
 #include "abstractstresstester.h"
+#include "logger.h"
 
 //#include <qcustomplot.h>
-#include <QProcess>
 
 #endif // LIBS_H

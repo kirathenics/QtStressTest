@@ -3,7 +3,8 @@
 
 #include "libs.h"
 
-class CPUCoreStressTester : public QRunnable {
+class CPUCoreStressTester : public QRunnable
+{
 public:
     CPUCoreStressTester(QAtomicInt* stopFlag) : stopFlag(stopFlag) {}
     void run() override;

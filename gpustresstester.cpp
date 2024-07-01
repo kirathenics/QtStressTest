@@ -1,6 +1,7 @@
 #include "gpustresstester.h"
 
-void GPUStressTester::run() {
+void GPUStressTester::run()
+{
     QOpenGLContext context;
     context.create();
     if (!context.isValid()) {

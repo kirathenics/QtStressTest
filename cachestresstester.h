@@ -3,7 +3,8 @@
 
 #include "libs.h"
 
-class CacheStressTester : public AbstractStressTester {
+class CacheStressTester : public AbstractStressTester
+{
 public:
     void run() override;
 };

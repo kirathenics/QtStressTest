@@ -35,6 +35,7 @@ public:
     QPushButton *start_pushButton;
     QPushButton *stop_pushButton;
     QPushButton *clear_pushButton;
+    QPushButton *saveLogs_pushButton;
     QTabWidget *tabWidget;
     QWidget *temperatures;
     QWidget *coolingFans;
@@ -65,7 +66,7 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         horizontalLayoutWidget = new QWidget(centralwidget);
         horizontalLayoutWidget->setObjectName(QString::fromUtf8("horizontalLayoutWidget"));
-        horizontalLayoutWidget->setGeometry(QRect(80, 590, 311, 41));
+        horizontalLayoutWidget->setGeometry(QRect(80, 590, 401, 41));
         buttons_horizontalLayout = new QHBoxLayout(horizontalLayoutWidget);
         buttons_horizontalLayout->setObjectName(QString::fromUtf8("buttons_horizontalLayout"));
         buttons_horizontalLayout->setContentsMargins(0, 0, 0, 0);
@@ -83,6 +84,11 @@ public:
         clear_pushButton->setObjectName(QString::fromUtf8("clear_pushButton"));
 
         buttons_horizontalLayout->addWidget(clear_pushButton);
+
+        saveLogs_pushButton = new QPushButton(horizontalLayoutWidget);
+        saveLogs_pushButton->setObjectName(QString::fromUtf8("saveLogs_pushButton"));
+
+        buttons_horizontalLayout->addWidget(saveLogs_pushButton);
 
         tabWidget = new QTabWidget(centralwidget);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
@@ -186,6 +192,7 @@ public:
         start_pushButton->setText(QCoreApplication::translate("StressTestApp", "\320\241\321\202\320\260\321\200\321\202", nullptr));
         stop_pushButton->setText(QCoreApplication::translate("StressTestApp", "\320\241\321\202\320\276\320\277", nullptr));
         clear_pushButton->setText(QCoreApplication::translate("StressTestApp", "\320\236\321\207\320\270\321\201\321\202\320\270\321\202\321\214", nullptr));
+        saveLogs_pushButton->setText(QCoreApplication::translate("StressTestApp", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(temperatures), QCoreApplication::translate("StressTestApp", "\320\242\320\265\320\274\320\277\320\265\321\200\320\260\321\202\321\203\321\200\321\213", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(coolingFans), QCoreApplication::translate("StressTestApp", "\320\222\320\265\320\275\321\202\320\270\320\273\321\217\321\202\320\276\321\200\321\213", nullptr));
         testStarted_label->setText(QCoreApplication::translate("StressTestApp", "\320\242\320\265\321\201\321\202 \320\275\320\260\321\207\320\260\320\273\321\201\321\217:", nullptr));

@@ -19,7 +19,7 @@
      <rect>
       <x>80</x>
       <y>590</y>
-      <width>311</width>
+      <width>401</width>
       <height>41</height>
      </rect>
     </property>
@@ -42,6 +42,13 @@
       <widget class="QPushButton" name="clear_pushButton">
        <property name="text">
         <string>Очистить</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="saveLogs_pushButton">
+       <property name="text">
+        <string>Сохранить</string>
        </property>
       </widget>
      </item>

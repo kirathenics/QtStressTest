@@ -1,6 +1,7 @@
 #include "cpucorestresstester.h"
 
-void CPUCoreStressTester::run() {
+void CPUCoreStressTester::run()
+{
     qDebug() << "Starting CPU stress test on thread" << QThread::currentThread();
     double result = 0;
     while (!stopFlag->loadAcquire()) {
@@ -11,7 +12,8 @@ void CPUCoreStressTester::run() {
     qDebug() << "CPU stress test stopped on thread" << QThread::currentThread();
 }
 
-unsigned long long CPUCoreStressTester::FibonacciFunction(int n) {
+unsigned long long CPUCoreStressTester::FibonacciFunction(int n)
+{
     if (n <= 1) {
         return 1;
     }

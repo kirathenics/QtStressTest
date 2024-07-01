@@ -3,7 +3,8 @@
 
 #include "libs.h"
 
-class FPUStressTester : public AbstractStressTester {
+class FPUStressTester : public AbstractStressTester
+{
 public:
     void run() override;
 };

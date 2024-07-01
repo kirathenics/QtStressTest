@@ -1,22 +1,18 @@
 #include "stresstestapp.h"
 #include "ui_stresstestapp.h"
 
-#include <QProcess>
-#include <QDebug>
-
-#include <QCoreApplication>
-#include <QProcess>
-#include <QDebug>
-
 StressTestApp::StressTestApp(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::StressTestApp)
+    , testingTimer(new QTimer(this))
+    , testingTime(new QTime(0, 0, 0))
     , cpuStressTester(nullptr)
     , fpuStressTester(nullptr)
     , cacheStressTester(nullptr)
     , ramStressTester(nullptr)
     , diskTesterManager(nullptr)
     , gpuStressTester(nullptr)
+    , logger(new Logger(this))
     //, key(0)
 {
     ui->setupUi(this);
@@ -65,9 +61,7 @@ StressTestApp::StressTestApp(QWidget *parent)
     ui->currentDateTime_label->setText("");
     ui->timer_label->setText("00:00:00");
 
-    timer = new QTimer(this);
-    timer->setInterval(1000);
-    time = new QTime(0, 0, 0);
+    testingTimer->setInterval(1000);
 
     /*cpuLoadTimer = new QTimer(this);
     connect(cpuLoadTimer, &QTimer::timeout, this, &StressTestApp::updateCpuLoadGraph);
@@ -83,42 +77,15 @@ StressTestApp::StressTestApp(QWidget *parent)
     ui->gpu_checkBox->setChecked(false);
 
     ui->stop_pushButton->setEnabled(false);
+    ui->saveLogs_pushButton->setEnabled(false);
 
-    connect(timer, &QTimer::timeout, this, &StressTestApp::updateTimerLabel);
+    connect(testingTimer, &QTimer::timeout, this, &StressTestApp::updateTimerLabel);
+    connect(cpuStressTester, &CpuStressTester::logMessage, this, &StressTestApp::handleLogMessage);
+    connect(logger, &Logger::logUpdated, this, &StressTestApp::updateLogTable);
 }
 
 StressTestApp::~StressTestApp()
 {
-    /*if (cpuStressTester) {
-        cpuStressTester->stop();
-        delete cpuStressTester;
-    }
-
-    if (fpuStressTester) {
-        fpuStressTester->stop();
-        delete fpuStressTester;
-    }
-
-    if (cacheStressTester) {
-        cacheStressTester->stop();
-        delete cacheStressTester;
-    }
-
-    if (ramStressTester) {
-        ramStressTester->stop();
-        delete ramStressTester;
-    }
-
-    if (diskTesterManager) {
-        diskTesterManager->stop();
-        delete diskTesterManager;
-    }
-
-    if (gpuStressTester) {
-        gpuStressTester->stop();
-        delete gpuStressTester;
-    }*/
-
     auto stopAndDeleteTester = [](auto* tester) {
         if (tester) {
             tester->stop();
@@ -139,27 +106,31 @@ StressTestApp::~StressTestApp()
 }
 
 
-void StressTestApp::updateCurrentDateTime() {
+void StressTestApp::updateCurrentDateTime()
+{
     QDateTime currentDateTime = QDateTime::currentDateTime();
     QString dateTimeString = currentDateTime.toString("yyyy-MM-dd HH:mm:ss");
     ui->currentDateTime_label->setText(dateTimeString);
 }
 
-void StressTestApp::startOrResumeTimer() {
-    if (!timer->isActive()) {
-        timer->start();
+void StressTestApp::startOrResumeTimer()
+{
+    if (!testingTimer->isActive()) {
+        testingTimer->start();
     }
 }
 
-void StressTestApp::stopTimer() {
-    if (timer->isActive()) {
-        timer->stop();
+void StressTestApp::stopTimer()
+{
+    if (testingTimer->isActive()) {
+        testingTimer->stop();
     }
 }
 
-void StressTestApp::updateTimerLabel() {
-    *time = time->addSecs(1);
-    ui->timer_label->setText(time->toString("HH:mm:ss"));
+void StressTestApp::updateTimerLabel()
+{
+    *testingTime = testingTime->addSecs(1);
+    ui->timer_label->setText(testingTime->toString("HH:mm:ss"));
 }
 
 
@@ -168,97 +139,52 @@ void StressTestApp::on_start_pushButton_clicked()
 {
     ui->start_pushButton->setEnabled(false);
     ui->stop_pushButton->setEnabled(true);
+    ui->saveLogs_pushButton->setEnabled(false);
 
     updateCurrentDateTime();
     startOrResumeTimer();
 
     qDebug() << "System test started";
     addLogEntry("Тест системы начался!");
+    //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест системы начался!");
+    emit
 
-//    // Лямбда-функция для управления тестерами
-//    auto startTester = [](auto*& tester, auto* newTester) {
-//        if (tester) {
-//            tester->stop();
-//            delete tester;
-//        }
-//        tester = newTester;
-//        if (tester) {
-//            tester->run();
-//        }
-//    };
+    // Лямбда-функция для управления тестерами
+    auto startTester = [](auto*& tester, auto* newTester) {
+        if (tester) {
+            tester->stop();
+            delete tester;
+        }
+        tester = newTester;
+        if (tester) {
+            tester->start();
+        }
+    };
 
-//    // Управление тестерами
-//    if (ui->cpu_checkBox->isChecked()) {
-//        startTester(cpuStressTester, new CPUStressTester());
-//    }
-//    if (ui->fpu_checkBox->isChecked()) {
-//        startTester(fpuStressTester, new FPUStressTester());
-//    }
-//    if (ui->cache_checkBox->isChecked()) {
-//        startTester(cacheStressTester, new CacheStressTester());
-//    }
-//    if (ui->ram_checkBox->isChecked()) {
-//        startTester(ramStressTester, new RAMStressTester());
-//    }
-//    if (ui->localDisk_checkBox->isChecked()) {
-//        startTester(diskTesterManager, new DiskTesterManager());
-//    }
-//    if (ui->gpu_checkBox->isChecked()) {
-//        startTester(gpuStressTester, new GPUStressTester());
-//    }
-
+    // Управление тестерами
     if (ui->cpu_checkBox->isChecked()) {
-        if (cpuStressTester) {
-            cpuStressTester->stop();
-            delete cpuStressTester;
-        }
-        cpuStressTester = new CPUStressTester();
-        cpuStressTester->run();
+        startTester(cpuStressTester, new CPUStressTester());
+        //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест ЦП начался!");
     }
-
     if (ui->fpu_checkBox->isChecked()) {
-        if (fpuStressTester) {
-            fpuStressTester->stop();
-            delete fpuStressTester;
-        }
-        fpuStressTester = new FPUStressTester();
-        fpuStressTester->start();
+        startTester(fpuStressTester, new FPUStressTester());
+        //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест математического сопроцессора начался!");
     }
-
     if (ui->cache_checkBox->isChecked()) {
-        if (cacheStressTester) {
-            cacheStressTester->stop();
-            delete cacheStressTester;
-        }
-        cacheStressTester = new CacheStressTester();
-        cacheStressTester->start();
+        startTester(cacheStressTester, new CacheStressTester());
+        //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест кэша ЦП начался!");
     }
-
     if (ui->ram_checkBox->isChecked()) {
-        if (ramStressTester) {
-            ramStressTester->stop();
-            delete ramStressTester;
-        }
-        ramStressTester = new RAMStressTester();
-        ramStressTester->start();
+        startTester(ramStressTester, new RAMStressTester());
+        //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест ОЗУ начался!");
     }
-
     if (ui->localDisk_checkBox->isChecked()) {
-        if (diskTesterManager) {
-            diskTesterManager->stop();
-            delete diskTesterManager;
-        }
-        diskTesterManager = new DiskTesterManager();
-        diskTesterManager->run();
+        startTester(diskTesterManager, new DiskTesterManager());
+        //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест дисков начался!");
     }
-
     if (ui->gpu_checkBox->isChecked()) {
-        if (gpuStressTester) {
-            gpuStressTester->stop();
-            delete gpuStressTester;
-        }
-        gpuStressTester = new GPUStressTester();
-        gpuStressTester->start();
+        startTester(gpuStressTester, new GPUStressTester());
+        //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "Тест графического процессора начался!");
     }
 }
 
@@ -267,43 +193,9 @@ void StressTestApp::on_stop_pushButton_clicked()
 {
     ui->start_pushButton->setEnabled(true);
     ui->stop_pushButton->setEnabled(false);
+    ui->saveLogs_pushButton->setEnabled(true);
+
     stopTimer();
-
-    /*if (cpuStressTester) {
-        cpuStressTester->stop();
-        delete cpuStressTester;
-        cpuStressTester = nullptr;
-    }
-
-    if (fpuStressTester) {
-        fpuStressTester->stop();
-        delete fpuStressTester;
-        fpuStressTester = nullptr;
-    }
-
-    if (cacheStressTester) {
-        cacheStressTester->stop();
-        delete cacheStressTester;
-        cacheStressTester = nullptr;
-    }
-
-    if (ramStressTester) {
-        ramStressTester->stop();
-        delete ramStressTester;
-        ramStressTester = nullptr;
-    }
-
-    if (diskTesterManager) {
-        diskTesterManager->stop();
-        delete diskTesterManager;
-        diskTesterManager = nullptr;
-    }
-
-    if (gpuStressTester) {
-        gpuStressTester->stop();
-        delete gpuStressTester;
-        gpuStressTester = nullptr;
-    }*/
 
     // Лямбда-функция для остановки и удаления тестеров
     auto stopAndDeleteTester = [](auto*& tester) {
@@ -314,8 +206,6 @@ void StressTestApp::on_stop_pushButton_clicked()
         }
     };
 
-    // Остановка и удаление тестеров
-    stopAndDeleteTester(cpuStressTester);
     stopAndDeleteTester(fpuStressTester);
     stopAndDeleteTester(cacheStressTester);
     stopAndDeleteTester(ramStressTester);
@@ -324,6 +214,7 @@ void StressTestApp::on_stop_pushButton_clicked()
 
     qDebug() << "System test stopped";
     addLogEntry("Тест системы завершился!");
+    logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест системы завершился!");
 }
 
 void StressTestApp::on_clear_pushButton_clicked()
@@ -334,8 +225,27 @@ void StressTestApp::on_clear_pushButton_clicked()
     if (ui->start_pushButton->isEnabled()) {
         ui->currentDateTime_label->setText("");
         ui->timer_label->setText("00:00:00");
-        time = new QTime(0, 0, 0);
+        testingTime = new QTime(0, 0, 0);
     }
+}
+
+void StressTestApp::on_saveLogs_pushButton_clicked()
+{    
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Logs"), "", tr("Text Files (*.txt);;All Files (*)"));
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    if (!logger->saveLogsToFile(fileName)) {
+        QMessageBox::warning(this, tr("Save Logs"), tr("Failed to save logs."));
+    } else {
+        QMessageBox::information(this, tr("Save Logs"), tr("Logs saved successfully."));
+    }
+}
+
+void StressTestApp::handleLogMessage(const QString &message)
+{
+    logger->addLog(message);
 }
 
 void StressTestApp::addLogEntry(const QString &action)
@@ -374,7 +284,8 @@ void StressTestApp::updateCpuLoadGraph()
 }*/
 
 
-double StressTestApp::getCPULoad() {
+double StressTestApp::getCPULoad()
+{
     static FILETIME prevIdleTime = { 0, 0 };
     static FILETIME prevKernelTime = { 0, 0 };
     static FILETIME prevUserTime = { 0, 0 };
@@ -546,3 +457,6 @@ void StressTestApp::updateVoltageInfo() {
     pEnumerator->Release();
     CoUninitialize();
 }*/
+
+
+

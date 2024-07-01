@@ -30,7 +30,8 @@
 //};
 
 
-class RAMStressTester : public AbstractStressTester {
+class RAMStressTester : public AbstractStressTester
+{
 public:
     void run() override;
 };

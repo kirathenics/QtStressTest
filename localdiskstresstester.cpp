@@ -1,6 +1,7 @@
 #include "localdiskstresstester.h"
 
-void LocalDiskStressTester::run() {
+void LocalDiskStressTester::run()
+{
     qDebug() << "Starting disk stress test on" << rootPath;
 
     QDir testDir(rootPath + "/StressTest");
@@ -20,7 +21,8 @@ void LocalDiskStressTester::run() {
     qDebug() << "Disk stress test stopped on" << rootPath;
 }
 
-void LocalDiskStressTester::stressTestDisk(const QString& path) {
+void LocalDiskStressTester::stressTestDisk(const QString& path)
+{
     const qint64 fileSize = 1024 * 1024 * 10; // 10 MB
     const QString testFileName = path + "/stress_test_file.bin";
 

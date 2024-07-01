@@ -19,6 +19,9 @@
 #include <QTableWidget>
 #include <QHeaderView>
 
+#include <QStringList>
+#include <QFileDialog>
+#include <QMessageBox>
 
 /*#include <comdef.h>
 #include <Wbemidl.h>
@@ -48,10 +51,13 @@ private slots:
 
     /*void updateCpuLoadGraph();*/
 
+    void on_saveLogs_pushButton_clicked();
+    void handleLogMessage(const QString &message);
+
 private:
     Ui::StressTestApp *ui;
-    QTimer* timer;
-    QTime* time;
+    QTimer* testingTimer;
+    QTime* testingTime;
 
     CPUStressTester* cpuStressTester;
     FPUStressTester* fpuStressTester;
@@ -59,6 +65,7 @@ private:
     RAMStressTester* ramStressTester;
     DiskTesterManager* diskTesterManager;
     GPUStressTester *gpuStressTester;
+    Logger* logger;
 
     /*QTimer *cpuLoadTimer;
     QCPGraph *cpuLoadGraph;

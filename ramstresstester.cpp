@@ -1,6 +1,7 @@
 #include "ramstresstester.h"
 
-void RAMStressTester::run() {
+void RAMStressTester::run()
+{
     qDebug() << "Starting RAM stress test";
     const int arraySize = 1024 * 1024 * 100; // 100 MB
 

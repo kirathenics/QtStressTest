@@ -18,6 +18,7 @@ SOURCES += \
     fpustresstester.cpp \
     gpustresstester.cpp \
     localdiskstresstester.cpp \
+    logger.cpp \
     main.cpp \
     ramstresstester.cpp \
     stresstestapp.cpp
@@ -32,6 +33,7 @@ HEADERS += \
     gpustresstester.h \
     libs.h \
     localdiskstresstester.h \
+    logger.h \
     ramstresstester.h \
     stresstestapp.h
 

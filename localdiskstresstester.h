@@ -3,7 +3,8 @@
 
 #include "libs.h"
 
-class LocalDiskStressTester : public QThread {
+class LocalDiskStressTester : public QThread
+{
     Q_OBJECT
 public:
     explicit LocalDiskStressTester(const QString &rootPath, QObject *parent = nullptr)

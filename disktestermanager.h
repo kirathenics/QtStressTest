@@ -3,7 +3,8 @@
 
 #include "localdiskstresstester.h"
 
-class DiskTesterManager {
+class DiskTesterManager
+{
 public:
     DiskTesterManager() = default;
 
@@ -11,7 +12,7 @@ public:
         stop();
     }
 
-    void run();
+    void start();
     void stop();
 
 private:

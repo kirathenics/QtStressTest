@@ -1,6 +1,7 @@
 #include "fpustresstester.h"
 
-void FPUStressTester::run() {
+void FPUStressTester::run()
+{
     qDebug() << "Starting FPU stress test";
 
     double result = 0;

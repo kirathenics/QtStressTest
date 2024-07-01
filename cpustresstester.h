@@ -3,7 +3,8 @@
 
 #include "cpucorestresstester.h"
 
-class CPUStressTester {
+class CPUStressTester
+{
 public:
     CPUStressTester() : stopFlag(0) {}
 
@@ -11,7 +12,7 @@ public:
         stop();
     }
 
-    void run();
+    void start();
     void stop();
 
 private:
