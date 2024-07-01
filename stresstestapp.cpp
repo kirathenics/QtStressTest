@@ -36,7 +36,7 @@ StressTestApp::StressTestApp(QWidget *parent)
     ui->logs_tableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
 
 
-    //tab
+    /*//tab
     // Внутри конструктора StressTestApp или соответствующего метода
     QWidget *voltageTab = new QWidget;
     QVBoxLayout *layout = new QVBoxLayout(voltageTab);
@@ -60,7 +60,7 @@ StressTestApp::StressTestApp(QWidget *parent)
     voltageUpdateTimer->start(1000); // Обновление каждые 1 секунд
 
     // Первоначальное обновление информации о напряжениях
-    updateVoltageInfo();
+    updateVoltageInfo();*/
 
     ui->currentDateTime_label->setText("");
     ui->timer_label->setText("00:00:00");
@@ -420,48 +420,9 @@ double StressTestApp::getCPULoad() {
 
     int cpuLoad = (diffTotalTime - diffIdleTime) * 100.0 / diffTotalTime;
     return cpuLoad;
-
-    /*QProcess process;
-    process.start("wmic cpu get loadpercentage");
-    process.waitForFinished();
-    QString output = process.readAllStandardOutput();
-    qDebug() << output;
-    bool ok;
-    double cpuLoad = output.trimmed().toDouble(&ok);
-    if (ok)
-        return cpuLoad;
-    else
-        return -1.0; // Ошибка*/
-
-//    QProcess process;
-//    process.start("wmic cpu get loadpercentage");
-////    process.start("wmic cpu get loadpercentage");
-//    if (!process.waitForStarted() || !process.waitForFinished()) {
-//        qWarning() << "Failed to execute the command.";
-//        return -1; // Возвращаем -1 в случае ошибки
-//    }
-
-//    QString output = QString::fromLocal8Bit(process.readAllStandardOutput());
-//    // output содержит результат выполнения команды, например: "LoadPercentage  20"
-
-//    // Разбираем результат, чтобы получить числовое значение
-//    QStringList parts = output.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
-//    if (parts.size() < 2) {
-//        qWarning() << "Unexpected output format.";
-//        return -1; // Возвращаем -1 в случае ошибочного формата вывода
-//    }
-
-//    bool ok;
-//    int loadPercentage = parts[1].toInt(&ok);
-//    if (!ok) {
-//        qWarning() << "Failed to convert to integer.";
-//        return -1; // Возвращаем -1 в случае неудачного преобразования
-//    }
-
-//    return loadPercentage;
 }
 
-QString StressTestApp::fromBSTR(BSTR bstr) {
+/*QString StressTestApp::fromBSTR(BSTR bstr) {
     int wslen = SysStringLen(bstr);
     return QString::fromUtf16((const ushort*)bstr, wslen);
 }
@@ -593,4 +554,4 @@ void StressTestApp::updateVoltageInfo() {
     pLoc->Release();
     pEnumerator->Release();
     CoUninitialize();
-}
+}*/

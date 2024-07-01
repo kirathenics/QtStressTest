@@ -20,13 +20,13 @@
 #include <QHeaderView>
 
 
-#include <comdef.h>
+/*#include <comdef.h>
 #include <Wbemidl.h>
 
 #pragma comment(lib, "ole32.lib")
 #pragma comment(lib, "wbemuuid.lib")
 #pragma comment(lib, "oleaut32.lib")
-#pragma comment(lib, "comsuppw.lib")
+#pragma comment(lib, "comsuppw.lib")*/
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class StressTestApp; }
@@ -75,10 +75,10 @@ private:
     double getCPULoad();
 
 
-    QTableWidget *voltageTable;
+    /*QTableWidget *voltageTable;
 
     QString fromBSTR(BSTR bstr);
-    void updateVoltageInfo();
+    void updateVoltageInfo();*/
 
 };
 
