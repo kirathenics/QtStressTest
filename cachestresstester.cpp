@@ -14,6 +14,11 @@ void CacheStressTester::run() {
         : "eax", "ebx", "ecx", "edx"
         );
 
+    if (cacheSize <= 0) {
+        qDebug() << "Error! Unable to determine L1 cache size!";
+        return;
+    }
+
     qDebug() << "Starting cache stress test for L1 cache size" << cacheSize << "KB";
     /*using CPUInfo = SYSTEM_LOGICAL_PROCESSOR_INFORMATION;
     DWORD len = 0;
