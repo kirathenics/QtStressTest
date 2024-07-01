@@ -159,15 +159,7 @@ void StressTestApp::stopTimer() {
 
 void StressTestApp::updateTimerLabel() {
     *time = time->addSecs(1);
-    //qDebug() << time;
     ui->timer_label->setText(time->toString("HH:mm:ss"));
-    int cpu = getCPULoad();
-    addLogEntry("Загрузка " + QString::number(cpu));
-    int x6cpu = 6 * cpu;
-    int x12cpu = 12 * cpu;
-    qDebug() << cpu;
-    qDebug() << "6 x " << x6cpu;
-    qDebug() << "12 x " << x12cpu;
 }
 
 
@@ -178,7 +170,6 @@ void StressTestApp::on_start_pushButton_clicked()
     ui->stop_pushButton->setEnabled(true);
 
     updateCurrentDateTime();
-
     startOrResumeTimer();
 
     qDebug() << "System test started";
