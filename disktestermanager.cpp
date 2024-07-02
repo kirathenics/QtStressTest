@@ -28,8 +28,6 @@ void DiskTesterManager::start()
 void DiskTesterManager::stop()
 {
     for (LocalDiskStressTester* tester : diskStressTesters) {
-        //tester->requestInterruption();
-        //tester->wait();
         tester->stop();
         delete tester;
     }

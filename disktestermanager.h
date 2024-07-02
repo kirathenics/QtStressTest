@@ -3,22 +3,6 @@
 
 #include "localdiskstresstester.h"
 
-/*class DiskTesterManager
-{
-public:
-    DiskTesterManager() = default;
-
-    ~DiskTesterManager() {
-        stop();
-    }
-
-    void start();
-    void stop();
-
-private:
-    QList<LocalDiskStressTester*> diskStressTesters;
-};*/
-
 class DiskTesterManager : public QObject
 {
     Q_OBJECT
