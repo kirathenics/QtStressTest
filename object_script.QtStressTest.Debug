@@ -10,7 +10,6 @@ debug/logger.o
 debug/main.o
 debug/ramstresstester.o
 debug/stresstestapp.o
-debug/testabs.o
 debug/moc_abstractstresstester.o
 debug/moc_cachestresstester.o
 debug/moc_cpucorestresstester.o
@@ -22,4 +21,3 @@ debug/moc_localdiskstresstester.o
 debug/moc_logger.o
 debug/moc_ramstresstester.o
 debug/moc_stresstestapp.o
-debug/moc_testabs.o

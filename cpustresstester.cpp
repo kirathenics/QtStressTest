@@ -13,7 +13,7 @@ CPUStressTester::~CPUStressTester()
 
 void CPUStressTester::start()
 {
-    //stop();
+    stop();
 
     stopFlag.fetchAndStoreRelaxed(0);
     int numCores = QThread::idealThreadCount();

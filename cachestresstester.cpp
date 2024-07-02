@@ -1,7 +1,7 @@
 #include "cachestresstester.h"
 
 CacheStressTester::CacheStressTester(QObject *parent)
-    : testabs(parent)
+    : AbstractStressTester(parent)
 {
 }
 
@@ -22,6 +22,7 @@ void CacheStressTester::run()
 
     if (cacheSize <= 0) {
         qDebug() << "Error! Unable to determine L1 cache size!";
+        emit logMessage("Ошибка! Невозможно определить размер кэша!");
         return;
     }
 

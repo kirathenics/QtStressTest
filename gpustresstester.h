@@ -18,8 +18,6 @@ public:
 
     void run() override;
 
-    using AbstractStressTester::logMessage;
-
 private:
     const char* vertexShaderSource = R"(
         #version 330 core

@@ -11,6 +11,7 @@ void GPUStressTester::run()
     context.create();
     if (!context.isValid()) {
         qDebug() << "Failed to create OpenGL context";
+        emit logMessage("Ошибка! Не удалось создать контекст OpenGL!");
         return;
     }
 
@@ -18,6 +19,7 @@ void GPUStressTester::run()
     surface.create();
     if (!surface.isValid()) {
         qDebug() << "Failed to create offscreen surface";
+        emit logMessage("Ошибка! Не удалось создать закадровую поверхность!");
         return;
     }
 
@@ -27,14 +29,17 @@ void GPUStressTester::run()
     QOpenGLShaderProgram shaderProgram;
     if (!shaderProgram.addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource)) {
         qDebug() << "Failed to compile vertex shader:" << shaderProgram.log();
+        emit logMessage("Ошибка! Не удалось скомпилировать вершинный шейдер: " + shaderProgram.log());
         return;
     }
     if (!shaderProgram.addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSource)) {
         qDebug() << "Failed to compile fragment shader:" << shaderProgram.log();
+        emit logMessage("Ошибка! Не удалось скомпилировать фрагментный шейдер: " + shaderProgram.log());
         return;
     }
     if (!shaderProgram.link()) {
         qDebug() << "Failed to link shader program:" << shaderProgram.log();
+        emit logMessage("Ошибка! Не удалось связать шейдерную программу: " + shaderProgram.log());
         return;
     }
 
@@ -71,7 +76,6 @@ void GPUStressTester::run()
         }
 
         context.swapBuffers(&surface);
-        // Убираем задержку, чтобы не снижать нагрузку на GPU
     }
 
     vao.release();

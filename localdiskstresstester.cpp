@@ -22,6 +22,7 @@ void LocalDiskStressTester::run()
     if (testDir.exists()) {
         if (!testDir.removeRecursively()) {
             qDebug() << "Failed to remove test directory:" << testDir.absolutePath();
+            emit logMessage("Ошибка! Не удалось удалить тестовую папку: " + testDir.absolutePath());
         }
     }
 
@@ -44,6 +45,7 @@ void LocalDiskStressTester::stressTestDisk(const QString& path)
             testFile.close();
         } else {
             qDebug() << "Failed to open file for writing:" << testFileName;
+            emit logMessage("Ошибка! Не удалось открыть файл на запись: " + testFileName);
             return;
         }
 
@@ -53,12 +55,14 @@ void LocalDiskStressTester::stressTestDisk(const QString& path)
             testFile.close();
         } else {
             qDebug() << "Failed to open file for reading:" << testFileName;
+            emit logMessage("Ошибка! Не удалось открыть файл на чтение: " + testFileName);
             return;
         }
 
         // Delete test file
         if (!testFile.remove()) {
             qDebug() << "Failed to delete test file:" << testFileName;
+            emit logMessage("Ошибка! Не удалось удалить тестовый файл: " + testFileName);
             return;
         }
 

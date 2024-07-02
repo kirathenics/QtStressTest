@@ -3,7 +3,7 @@
 
 #include "libs.h"
 
-class CacheStressTester : public testabs
+class CacheStressTester : public AbstractStressTester
 {
     Q_OBJECT
 
