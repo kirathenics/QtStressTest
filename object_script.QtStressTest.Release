@@ -11,8 +11,12 @@ release/main.o
 release/ramstresstester.o
 release/stresstestapp.o
 release/testabs.o
+release/moc_abstractstresstester.o
+release/moc_cachestresstester.o
 release/moc_fpustresstester.o
+release/moc_gpustresstester.o
 release/moc_localdiskstresstester.o
 release/moc_logger.o
+release/moc_ramstresstester.o
 release/moc_stresstestapp.o
 release/moc_testabs.o

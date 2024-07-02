@@ -1,5 +1,10 @@
 #include "cachestresstester.h"
 
+CacheStressTester::CacheStressTester(QObject *parent)
+    : testabs(parent)
+{
+}
+
 void CacheStressTester::run()
 {
     int cacheSize = 0;
@@ -21,6 +26,7 @@ void CacheStressTester::run()
     }
 
     qDebug() << "Starting cache stress test for L1 cache size" << cacheSize << "KB";
+    emit logMessage("Тест кэша процессора начался.");
 
     char* data = new char[cacheSize * 1024];
     for (int i = 0; i < cacheSize * 1024; ++i) {
@@ -29,4 +35,5 @@ void CacheStressTester::run()
     delete[] data;
 
     qDebug() << "Cache stress test stopped";
+    emit logMessage("Тест кэша процессора завершился.");
 }

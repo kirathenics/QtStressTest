@@ -11,8 +11,14 @@
 
 class GPUStressTester : public AbstractStressTester, protected QOpenGLFunctions
 {
+    Q_OBJECT
+
 public:
+    explicit GPUStressTester(QObject *parent = nullptr);
+
     void run() override;
+
+    using AbstractStressTester::logMessage;
 
 private:
     const char* vertexShaderSource = R"(

@@ -1,8 +1,14 @@
 #include "ramstresstester.h"
 
+RAMStressTester::RAMStressTester(QObject *parent)
+    : AbstractStressTester(parent)
+{
+}
+
 void RAMStressTester::run()
 {
     qDebug() << "Starting RAM stress test";
+    emit logMessage("Тест ОЗУ начался.");
     const int arraySize = 1024 * 1024 * 100; // 100 MB
 
     while (!isInterruptionRequested()) {
@@ -20,4 +26,5 @@ void RAMStressTester::run()
     }
 
     qDebug() << "RAM stress test stopped";
+    emit logMessage("Тест ОЗУ завершился.");
 }

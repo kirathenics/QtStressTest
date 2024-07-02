@@ -30,10 +30,22 @@
 //};
 
 
-class RAMStressTester : public AbstractStressTester
+/*class RAMStressTester : public AbstractStressTester
 {
 public:
     void run() override;
+};*/
+
+class RAMStressTester : public AbstractStressTester
+{
+    Q_OBJECT
+
+public:
+    explicit RAMStressTester(QObject *parent = nullptr);
+
+    void run() override;
+
+    using AbstractStressTester::logMessage;
 };
 
 #endif // RAMSTRESSTESTER_H

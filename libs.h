@@ -22,6 +22,7 @@
 #include <QStorageInfo>
 
 #include "abstractstresstester.h"
+#include "testabs.h"
 #include "logger.h"
 
 //#include <qcustomplot.h>

@@ -1,5 +1,10 @@
 #include "gpustresstester.h"
 
+GPUStressTester::GPUStressTester(QObject *parent)
+    : AbstractStressTester(parent)
+{
+}
+
 void GPUStressTester::run()
 {
     QOpenGLContext context;
@@ -52,6 +57,7 @@ void GPUStressTester::run()
     shaderProgram.setAttributeBuffer(0, GL_FLOAT, 0, 3, 3 * sizeof(float));
 
     qDebug() << "Starting GPU stress test";
+    emit logMessage("Тест графического процессора начался.");
 
     while (!isInterruptionRequested()) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -73,4 +79,5 @@ void GPUStressTester::run()
     shaderProgram.release();
 
     qDebug() << "GPU stress test stopped";
+    emit logMessage("Тест графического процессора завершился.");
 }
