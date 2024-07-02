@@ -7,7 +7,7 @@ StressTestApp::StressTestApp(QWidget *parent)
     , testingTimer(new QTimer(this))
     , testingTime(new QTime(0, 0, 0))
     , cpuStressTester(nullptr)
-    , fpuStressTester(nullptr)
+    , fpuStressTester(new FPUStressTester(this))
     , cacheStressTester(nullptr)
     , ramStressTester(nullptr)
     , diskTesterManager(nullptr)
@@ -80,8 +80,7 @@ StressTestApp::StressTestApp(QWidget *parent)
     ui->saveLogs_pushButton->setEnabled(false);
 
     connect(testingTimer, &QTimer::timeout, this, &StressTestApp::updateTimerLabel);
-    connect(cpuStressTester, &CpuStressTester::logMessage, this, &StressTestApp::handleLogMessage);
-    connect(logger, &Logger::logUpdated, this, &StressTestApp::updateLogTable);
+    connect(fpuStressTester, &FPUStressTester::logMessage, this, &StressTestApp::handleLogMessage);
 }
 
 StressTestApp::~StressTestApp()
@@ -147,15 +146,15 @@ void StressTestApp::on_start_pushButton_clicked()
     qDebug() << "System test started";
     addLogEntry("Тест системы начался!");
     //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест системы начался!");
-    emit
+    logger->addLog("Тест системы начался!");
 
     // Лямбда-функция для управления тестерами
     auto startTester = [](auto*& tester, auto* newTester) {
-        if (tester) {
+        /*if (tester) {
             tester->stop();
             delete tester;
         }
-        tester = newTester;
+        tester = newTester;*/
         if (tester) {
             tester->start();
         }
@@ -201,8 +200,8 @@ void StressTestApp::on_stop_pushButton_clicked()
     auto stopAndDeleteTester = [](auto*& tester) {
         if (tester) {
             tester->stop();
-            delete tester;
-            tester = nullptr;
+            /*delete tester;
+            tester = nullptr;*/
         }
     };
 
@@ -214,7 +213,9 @@ void StressTestApp::on_stop_pushButton_clicked()
 
     qDebug() << "System test stopped";
     addLogEntry("Тест системы завершился!");
-    logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест системы завершился!");
+    logger->addLog("Тест системы завершился!");
+
+    //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест системы завершился!");
 }
 
 void StressTestApp::on_clear_pushButton_clicked()

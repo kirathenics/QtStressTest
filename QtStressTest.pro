@@ -21,7 +21,8 @@ SOURCES += \
     logger.cpp \
     main.cpp \
     ramstresstester.cpp \
-    stresstestapp.cpp
+    stresstestapp.cpp \
+    testabs.cpp
 
 HEADERS += \
     abstractstresstester.h \
@@ -35,7 +36,8 @@ HEADERS += \
     localdiskstresstester.h \
     logger.h \
     ramstresstester.h \
-    stresstestapp.h
+    stresstestapp.h \
+    testabs.h
 
 FORMS += \
     stresstestapp.ui

@@ -6,8 +6,13 @@ release/disktestermanager.o
 release/fpustresstester.o
 release/gpustresstester.o
 release/localdiskstresstester.o
+release/logger.o
 release/main.o
 release/ramstresstester.o
 release/stresstestapp.o
+release/testabs.o
+release/moc_fpustresstester.o
 release/moc_localdiskstresstester.o
+release/moc_logger.o
 release/moc_stresstestapp.o
+release/moc_testabs.o

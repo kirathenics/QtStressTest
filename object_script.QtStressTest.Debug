@@ -6,8 +6,13 @@ debug/disktestermanager.o
 debug/fpustresstester.o
 debug/gpustresstester.o
 debug/localdiskstresstester.o
+debug/logger.o
 debug/main.o
 debug/ramstresstester.o
 debug/stresstestapp.o
+debug/testabs.o
+debug/moc_fpustresstester.o
 debug/moc_localdiskstresstester.o
+debug/moc_logger.o
 debug/moc_stresstestapp.o
+debug/moc_testabs.o
