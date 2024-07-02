@@ -13,6 +13,8 @@ release/stresstestapp.o
 release/testabs.o
 release/moc_abstractstresstester.o
 release/moc_cachestresstester.o
+release/moc_cpucorestresstester.o
+release/moc_cpustresstester.o
 release/moc_disktestermanager.o
 release/moc_fpustresstester.o
 release/moc_gpustresstester.o

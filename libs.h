@@ -7,6 +7,7 @@
 #include <QTime>
 
 #include <QDebug>
+#include <QString>
 #include <QtMath>
 #include <QRandomGenerator>
 

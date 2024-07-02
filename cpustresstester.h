@@ -3,17 +3,19 @@
 
 #include "cpucorestresstester.h"
 
-class CPUStressTester
+class CPUStressTester : public QObject
 {
-public:
-    CPUStressTester() : stopFlag(0) {}
+    Q_OBJECT
 
-    ~CPUStressTester() {
-        stop();
-    }
+public:
+    CPUStressTester(QObject *parent = nullptr);
+    ~CPUStressTester();
 
     void start();
     void stop();
+
+signals:
+    void logMessage(const QString &message);
 
 private:
     QThreadPool threadPool;

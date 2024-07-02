@@ -6,7 +6,7 @@ StressTestApp::StressTestApp(QWidget *parent)
     , ui(new Ui::StressTestApp)
     , testingTimer(new QTimer(this))
     , testingTime(new QTime(0, 0, 0))
-    , cpuStressTester(nullptr)
+    , cpuStressTester(new CPUStressTester(this))
     , fpuStressTester(new FPUStressTester(this))
     , cacheStressTester(new CacheStressTester(this))
     , ramStressTester(new RAMStressTester(this))
@@ -80,6 +80,7 @@ StressTestApp::StressTestApp(QWidget *parent)
     ui->saveLogs_pushButton->setEnabled(false);
 
     connect(testingTimer, &QTimer::timeout, this, &StressTestApp::updateTimerLabel);
+    connect(cpuStressTester, &CPUStressTester::logMessage, this, &StressTestApp::handleLogMessage);
     connect(fpuStressTester, &FPUStressTester::logMessage, this, &StressTestApp::handleLogMessage);
     connect(cacheStressTester, &CacheStressTester::logMessage, this, &StressTestApp::handleLogMessage);
     connect(ramStressTester, &RAMStressTester::logMessage, this, &StressTestApp::handleLogMessage);

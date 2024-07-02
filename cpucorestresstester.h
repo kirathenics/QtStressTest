@@ -3,16 +3,20 @@
 
 #include "libs.h"
 
-class CPUCoreStressTester : public QRunnable
+class CPUCoreStressTester : public QObject, public QRunnable
 {
+    Q_OBJECT
+
 public:
-    CPUCoreStressTester(QAtomicInt* stopFlag) : stopFlag(stopFlag) {}
+    CPUCoreStressTester(QAtomicInt* stopFlag, QObject *parent = nullptr);
+
     void run() override;
+
+signals:
+    void logMessage(const QString &message);
 
 private:
     QAtomicInt* stopFlag;
-
-    unsigned long long FibonacciFunction(int n);
 };
 
 #endif // CPUCORESTRESSTESTER_H

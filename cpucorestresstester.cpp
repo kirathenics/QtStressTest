@@ -1,21 +1,24 @@
 #include "cpucorestresstester.h"
 
+CPUCoreStressTester::CPUCoreStressTester(QAtomicInt* stopFlag, QObject *parent)
+    : QObject(parent), stopFlag(stopFlag)
+{
+}
+
 void CPUCoreStressTester::run()
 {
-    qDebug() << "Starting CPU stress test on thread" << QThread::currentThread();
+    QString threadInfo = QString("Тест ядра процессора в потоке %1 начался.").arg(reinterpret_cast<quintptr>(QThread::currentThread()));
+    qDebug() << threadInfo;
+    emit logMessage(threadInfo);
+
     double result = 0;
     while (!stopFlag->loadAcquire()) {
         for (int i = 0; i < 1000000; ++i) {
             result += qSin(QRandomGenerator::global()->generate());
         }
     }
-    qDebug() << "CPU stress test stopped on thread" << QThread::currentThread();
-}
 
-unsigned long long CPUCoreStressTester::FibonacciFunction(int n)
-{
-    if (n <= 1) {
-        return 1;
-    }
-    return FibonacciFunction(n - 1) + FibonacciFunction(n - 2);
+    threadInfo = QString("Тест ядра процессора в потоке %1 завершился.").arg(reinterpret_cast<quintptr>(QThread::currentThread()));
+    qDebug() << threadInfo;
+    emit logMessage(threadInfo);
 }
