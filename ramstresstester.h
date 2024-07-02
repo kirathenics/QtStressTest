@@ -29,13 +29,6 @@
 //    }
 //};
 
-
-/*class RAMStressTester : public AbstractStressTester
-{
-public:
-    void run() override;
-};*/
-
 class RAMStressTester : public AbstractStressTester
 {
     Q_OBJECT

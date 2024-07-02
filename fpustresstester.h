@@ -3,12 +3,6 @@
 
 #include "libs.h"
 
-/*class FPUStressTester : public AbstractStressTester
-{
-public:
-    void run() override;
-};*/
-
 class FPUStressTester : public AbstractStressTester
 {
     Q_OBJECT

@@ -3,12 +3,6 @@
 
 #include "libs.h"
 
-/*class CacheStressTester : public AbstractStressTester
-{
-public:
-    void run() override;
-};*/
-
 class CacheStressTester : public testabs
 {
     Q_OBJECT

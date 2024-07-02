@@ -148,16 +148,10 @@ void StressTestApp::on_start_pushButton_clicked()
 
     qDebug() << "System test started";
     addLogEntry("Тест системы начался!");
-    //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест системы начался!");
     logger->addLog("Тест системы начался!");
 
     // Лямбда-функция для управления тестерами
-    auto startTester = [](auto*& tester/*, auto* newTester*/) {
-        /*if (tester) {
-            tester->stop();
-            delete tester;
-        }
-        tester = newTester;*/
+    auto startTester = [](auto*& tester) {
         if (tester) {
             tester->start();
         }
@@ -165,28 +159,24 @@ void StressTestApp::on_start_pushButton_clicked()
 
     // Управление тестерами
     if (ui->cpu_checkBox->isChecked()) {
-        startTester(cpuStressTester/*, new CPUStressTester()*/);
+        startTester(cpuStressTester);
         //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест ЦП начался!");
     }
     if (ui->fpu_checkBox->isChecked()) {
-        startTester(fpuStressTester/**, new FPUStressTester()*/);
-        //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест математического сопроцессора начался!");
+        startTester(fpuStressTester);
     }
     if (ui->cache_checkBox->isChecked()) {
-        startTester(cacheStressTester/*, new CacheStressTester()*/);
-        //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест кэша ЦП начался!");
+        startTester(cacheStressTester);
     }
     if (ui->ram_checkBox->isChecked()) {
-        startTester(ramStressTester/*, new RAMStressTester()*/);
-        //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест ОЗУ начался!");
+        startTester(ramStressTester);
     }
     if (ui->localDisk_checkBox->isChecked()) {
-        startTester(diskTesterManager/*, new DiskTesterManager()*/);
+        startTester(diskTesterManager);
         //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест дисков начался!");
     }
     if (ui->gpu_checkBox->isChecked()) {
-        startTester(gpuStressTester/*, new GPUStressTester()*/);
-        //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "Тест графического процессора начался!");
+        startTester(gpuStressTester);
     }
 }
 
@@ -203,8 +193,6 @@ void StressTestApp::on_stop_pushButton_clicked()
     auto stopAndDeleteTester = [](auto*& tester) {
         if (tester) {
             tester->stop();
-            /*delete tester;
-            tester = nullptr;*/
         }
     };
 
@@ -218,8 +206,6 @@ void StressTestApp::on_stop_pushButton_clicked()
     qDebug() << "System test stopped";
     addLogEntry("Тест системы завершился!");
     logger->addLog("Тест системы завершился!");
-
-    //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест системы завершился!");
 }
 
 void StressTestApp::on_clear_pushButton_clicked()
