@@ -317,6 +317,7 @@ Makefile: QtStressTest.pro C:/Qt/6.2.4/mingw_64/mkspecs/win32-g++/qmake.conf C:/
 		C:/Qt/6.2.4/mingw_64/mkspecs/features/yacc.prf \
 		C:/Qt/6.2.4/mingw_64/mkspecs/features/lex.prf \
 		QtStressTest.pro \
+		C:/Qt/6.2.4/mingw_64/lib/Qt6Charts.prl \
 		C:/Qt/6.2.4/mingw_64/lib/Qt6OpenGLWidgets.prl \
 		C:/Qt/6.2.4/mingw_64/lib/Qt6OpenGL.prl \
 		C:/Qt/6.2.4/mingw_64/lib/Qt6PrintSupport.prl \
@@ -573,6 +574,7 @@ C:/Qt/6.2.4/mingw_64/mkspecs/features/exceptions.prf:
 C:/Qt/6.2.4/mingw_64/mkspecs/features/yacc.prf:
 C:/Qt/6.2.4/mingw_64/mkspecs/features/lex.prf:
 QtStressTest.pro:
+C:/Qt/6.2.4/mingw_64/lib/Qt6Charts.prl:
 C:/Qt/6.2.4/mingw_64/lib/Qt6OpenGLWidgets.prl:
 C:/Qt/6.2.4/mingw_64/lib/Qt6OpenGL.prl:
 C:/Qt/6.2.4/mingw_64/lib/Qt6PrintSupport.prl:

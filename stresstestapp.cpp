@@ -13,7 +13,13 @@ StressTestApp::StressTestApp(QWidget *parent)
     , diskTesterManager(new DiskTesterManager(this))
     , gpuStressTester(new GPUStressTester(this))
     , logger(new Logger(this))
-    //, key(0)
+    , cpuLoadTimer(new QTimer(this))
+    , key(0)
+    , cpuSeries(new QLineSeries())
+    , cpuChart(new QChart())
+    , cpuChartView(new QChartView(cpuChart))
+    , axisX(new QValueAxis())
+    , axisY(new QValueAxis())
 {
     ui->setupUi(this);
 
@@ -63,11 +69,32 @@ StressTestApp::StressTestApp(QWidget *parent)
 
     testingTimer->setInterval(1000);
 
-    /*cpuLoadTimer = new QTimer(this);
+
+    // Настройка графика загрузки ЦП
+    cpuSeries->setName("CPU Load");
+
+    cpuChart->addSeries(cpuSeries);
+    cpuChart->setTitle("CPU Load Over Time");
+    cpuChart->legend()->hide();
+
+    axisX->setRange(0, 60);
+    axisX->setLabelFormat("%i");
+    axisX->setTitleText("Time (s)");
+
+    axisY->setRange(0, 100);
+    axisY->setTitleText("CPU Load (%)");
+
+    cpuChart->addAxis(axisX, Qt::AlignBottom);
+    cpuChart->addAxis(axisY, Qt::AlignLeft);
+
+    cpuSeries->attachAxis(axisX);
+    cpuSeries->attachAxis(axisY);
+
+    cpuChartView->setRenderHint(QPainter::Antialiasing);
+    ui->cpuLoadLayout->addWidget(cpuChartView);
+
     connect(cpuLoadTimer, &QTimer::timeout, this, &StressTestApp::updateCpuLoadGraph);
     cpuLoadTimer->start(1000);
-
-    setupCpuLoadGraph();*/
 
     ui->cpu_checkBox->setChecked(false);
     ui->fpu_checkBox->setChecked(true);
@@ -274,6 +301,22 @@ void StressTestApp::updateCpuLoadGraph()
     ui->cpuLoad_Plot->replot();
 }*/
 
+
+void StressTestApp::updateCpuLoadGraph()
+{
+    double cpuLoad = getCPULoad();
+    qDebug() << "CPU Load: " << cpuLoad;
+
+    if (cpuSeries->count() > 60) {
+        cpuSeries->removePoints(0, cpuSeries->count() - 60);
+        for (int i = 0; i < cpuSeries->count(); ++i) {
+            cpuSeries->replace(i, i, cpuSeries->at(i).y());
+        }
+        axisX->setRange(0, 60);
+    }
+
+    cpuSeries->append(cpuSeries->count(), cpuLoad);
+}
 
 double StressTestApp::getCPULoad()
 {

@@ -23,6 +23,11 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
+#include <QTabWidget>
+#include <QtCharts/QChartView>
+#include <QtCharts/QLineSeries>
+#include <QtCharts/QValueAxis>
+
 /*#include <comdef.h>
 #include <Wbemidl.h>
 
@@ -49,7 +54,7 @@ private slots:
     void on_stop_pushButton_clicked();
     void on_clear_pushButton_clicked();
 
-    /*void updateCpuLoadGraph();*/
+    void updateCpuLoadGraph();
 
     void on_saveLogs_pushButton_clicked();
     void handleLogMessage(const QString &message);
@@ -67,9 +72,14 @@ private:
     GPUStressTester *gpuStressTester;
     Logger* logger;
 
-    /*QTimer *cpuLoadTimer;
-    QCPGraph *cpuLoadGraph;
-    double key;*/
+    QTimer *cpuLoadTimer;
+    int key;
+
+    QLineSeries *cpuSeries;
+    QChart *cpuChart;
+    QChartView *cpuChartView;
+    QValueAxis *axisX;
+    QValueAxis *axisY;
 
     void updateCurrentDateTime();
     void startOrResumeTimer();
@@ -77,7 +87,8 @@ private:
     void updateTimerLabel();
     void addLogEntry(const QString &action);
 
-    /*void setupCpuLoadGraph();*/
+    void setupCpuLoadGraph();
+
     QTableWidget* cpuInfoTable;
     double getCPULoad();
 

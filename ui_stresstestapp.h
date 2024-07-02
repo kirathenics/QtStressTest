@@ -54,6 +54,8 @@ public:
     QCheckBox *localDisk_checkBox;
     QCheckBox *gpu_checkBox;
     QTableWidget *logs_tableWidget;
+    QWidget *verticalLayoutWidget_2;
+    QVBoxLayout *cpuLoadLayout;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -66,7 +68,7 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         horizontalLayoutWidget = new QWidget(centralwidget);
         horizontalLayoutWidget->setObjectName(QString::fromUtf8("horizontalLayoutWidget"));
-        horizontalLayoutWidget->setGeometry(QRect(80, 590, 401, 41));
+        horizontalLayoutWidget->setGeometry(QRect(60, 590, 401, 41));
         buttons_horizontalLayout = new QHBoxLayout(horizontalLayoutWidget);
         buttons_horizontalLayout->setObjectName(QString::fromUtf8("buttons_horizontalLayout"));
         buttons_horizontalLayout->setContentsMargins(0, 0, 0, 0);
@@ -92,7 +94,7 @@ public:
 
         tabWidget = new QTabWidget(centralwidget);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
-        tabWidget->setGeometry(QRect(70, 220, 671, 281));
+        tabWidget->setGeometry(QRect(60, 220, 681, 81));
         temperatures = new QWidget();
         temperatures->setObjectName(QString::fromUtf8("temperatures"));
         tabWidget->addTab(temperatures, QString());
@@ -101,7 +103,7 @@ public:
         tabWidget->addTab(coolingFans, QString());
         horizontalLayoutWidget_2 = new QWidget(centralwidget);
         horizontalLayoutWidget_2->setObjectName(QString::fromUtf8("horizontalLayoutWidget_2"));
-        horizontalLayoutWidget_2->setGeometry(QRect(80, 530, 401, 41));
+        horizontalLayoutWidget_2->setGeometry(QRect(60, 530, 401, 41));
         time_horizontalLayout = new QHBoxLayout(horizontalLayoutWidget_2);
         time_horizontalLayout->setObjectName(QString::fromUtf8("time_horizontalLayout"));
         time_horizontalLayout->setContentsMargins(0, 0, 0, 0);
@@ -132,7 +134,7 @@ public:
 
         verticalLayoutWidget = new QWidget(centralwidget);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(70, 20, 191, 164));
+        verticalLayoutWidget->setGeometry(QRect(58, 20, 191, 164));
         checkBoxes_verticalLayout = new QVBoxLayout(verticalLayoutWidget);
         checkBoxes_verticalLayout->setObjectName(QString::fromUtf8("checkBoxes_verticalLayout"));
         checkBoxes_verticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -168,7 +170,13 @@ public:
 
         logs_tableWidget = new QTableWidget(centralwidget);
         logs_tableWidget->setObjectName(QString::fromUtf8("logs_tableWidget"));
-        logs_tableWidget->setGeometry(QRect(330, 20, 411, 171));
+        logs_tableWidget->setGeometry(QRect(330, 20, 411, 161));
+        verticalLayoutWidget_2 = new QWidget(centralwidget);
+        verticalLayoutWidget_2->setObjectName(QString::fromUtf8("verticalLayoutWidget_2"));
+        verticalLayoutWidget_2->setGeometry(QRect(60, 330, 681, 181));
+        cpuLoadLayout = new QVBoxLayout(verticalLayoutWidget_2);
+        cpuLoadLayout->setObjectName(QString::fromUtf8("cpuLoadLayout"));
+        cpuLoadLayout->setContentsMargins(0, 0, 0, 0);
         StressTestApp->setCentralWidget(centralwidget);
         menubar = new QMenuBar(StressTestApp);
         menubar->setObjectName(QString::fromUtf8("menubar"));
