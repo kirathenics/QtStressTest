@@ -1,13 +1,15 @@
 #include "cpucorestresstester.h"
 
-CPUCoreStressTester::CPUCoreStressTester(QAtomicInt* stopFlag, QObject *parent)
-    : QObject(parent), stopFlag(stopFlag)
+CPUCoreStressTester::CPUCoreStressTester(QAtomicInt* stopFlag, int coreNumber, QObject *parent)
+    : QObject(parent)
+    , stopFlag(stopFlag)
+    , coreNumber(coreNumber)
 {
 }
 
 void CPUCoreStressTester::run()
 {
-    QString threadInfo = QString("Тест ядра процессора в потоке %1 начался.").arg(reinterpret_cast<quintptr>(QThread::currentThread()));
+    QString threadInfo = QString("Тест ядра процессора #%1 начался.").arg(coreNumber);
     qDebug() << threadInfo;
     emit logMessage(threadInfo);
 
@@ -18,7 +20,7 @@ void CPUCoreStressTester::run()
         }
     }
 
-    threadInfo = QString("Тест ядра процессора в потоке %1 завершился.").arg(reinterpret_cast<quintptr>(QThread::currentThread()));
+    threadInfo = QString("Тест ядра процессора #%1 завершился.").arg(coreNumber);
     qDebug() << threadInfo;
     emit logMessage(threadInfo);
 }

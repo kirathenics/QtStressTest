@@ -162,7 +162,6 @@ void StressTestApp::on_start_pushButton_clicked()
     // Управление тестерами
     if (ui->cpu_checkBox->isChecked()) {
         startTester(cpuStressTester);
-        //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест ЦП начался!");
     }
     if (ui->fpu_checkBox->isChecked()) {
         startTester(fpuStressTester);
@@ -175,7 +174,6 @@ void StressTestApp::on_start_pushButton_clicked()
     }
     if (ui->localDisk_checkBox->isChecked()) {
         startTester(diskTesterManager);
-        //logs.append("["  + QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss") + "] Тест дисков начался!");
     }
     if (ui->gpu_checkBox->isChecked()) {
         startTester(gpuStressTester);

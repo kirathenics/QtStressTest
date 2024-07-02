@@ -8,7 +8,7 @@ class CPUCoreStressTester : public QObject, public QRunnable
     Q_OBJECT
 
 public:
-    CPUCoreStressTester(QAtomicInt* stopFlag, QObject *parent = nullptr);
+    CPUCoreStressTester(QAtomicInt* stopFlag, int coreNumber, QObject *parent = nullptr);
 
     void run() override;
 
@@ -17,6 +17,7 @@ signals:
 
 private:
     QAtomicInt* stopFlag;
+    int coreNumber;
 };
 
 #endif // CPUCORESTRESSTESTER_H

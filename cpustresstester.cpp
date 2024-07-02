@@ -18,7 +18,7 @@ void CPUStressTester::start()
     stopFlag.fetchAndStoreRelaxed(0);
     int numCores = QThread::idealThreadCount();
     for (int i = 0; i < numCores; ++i) {
-        CPUCoreStressTester* task = new CPUCoreStressTester(&stopFlag, this);
+        CPUCoreStressTester* task = new CPUCoreStressTester(&stopFlag, i, this);
         connect(task, &CPUCoreStressTester::logMessage, this, &CPUStressTester::logMessage);
         threadPool.start(task);
     }
