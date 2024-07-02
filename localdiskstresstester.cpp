@@ -1,8 +1,15 @@
 #include "localdiskstresstester.h"
 
+LocalDiskStressTester::LocalDiskStressTester(const QString &rootPath, QObject *parent)
+    : AbstractStressTester(parent)
+    , rootPath(rootPath)
+{
+}
+
 void LocalDiskStressTester::run()
 {
     qDebug() << "Starting disk stress test on" << rootPath;
+    emit logMessage("Тест на диске " + rootPath + " начался.");
 
     QDir testDir(rootPath + "/StressTest");
     if (!testDir.exists()) {
@@ -19,6 +26,7 @@ void LocalDiskStressTester::run()
     }
 
     qDebug() << "Disk stress test stopped on" << rootPath;
+    emit logMessage("Тест на диске " + rootPath + " завершился.");
 }
 
 void LocalDiskStressTester::stressTestDisk(const QString& path)

@@ -10,7 +10,7 @@ StressTestApp::StressTestApp(QWidget *parent)
     , fpuStressTester(new FPUStressTester(this))
     , cacheStressTester(new CacheStressTester(this))
     , ramStressTester(new RAMStressTester(this))
-    , diskTesterManager(nullptr)
+    , diskTesterManager(new DiskTesterManager(this))
     , gpuStressTester(new GPUStressTester(this))
     , logger(new Logger(this))
     //, key(0)
@@ -84,6 +84,7 @@ StressTestApp::StressTestApp(QWidget *parent)
     connect(cacheStressTester, &CacheStressTester::logMessage, this, &StressTestApp::handleLogMessage);
     connect(ramStressTester, &RAMStressTester::logMessage, this, &StressTestApp::handleLogMessage);
     connect(gpuStressTester, &GPUStressTester::logMessage, this, &StressTestApp::handleLogMessage);
+    connect(diskTesterManager, &DiskTesterManager::logMessage, this, &StressTestApp::handleLogMessage);
 }
 
 StressTestApp::~StressTestApp()

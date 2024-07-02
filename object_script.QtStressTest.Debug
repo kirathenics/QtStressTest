@@ -13,6 +13,7 @@ debug/stresstestapp.o
 debug/testabs.o
 debug/moc_abstractstresstester.o
 debug/moc_cachestresstester.o
+debug/moc_disktestermanager.o
 debug/moc_fpustresstester.o
 debug/moc_gpustresstester.o
 debug/moc_localdiskstresstester.o
