@@ -173,7 +173,7 @@ public:
         logs_tableWidget->setGeometry(QRect(330, 20, 411, 161));
         verticalLayoutWidget_2 = new QWidget(centralwidget);
         verticalLayoutWidget_2->setObjectName(QString::fromUtf8("verticalLayoutWidget_2"));
-        verticalLayoutWidget_2->setGeometry(QRect(60, 330, 681, 181));
+        verticalLayoutWidget_2->setGeometry(QRect(60, 220, 681, 291));
         cpuLoadLayout = new QVBoxLayout(verticalLayoutWidget_2);
         cpuLoadLayout->setObjectName(QString::fromUtf8("cpuLoadLayout"));
         cpuLoadLayout->setContentsMargins(0, 0, 0, 0);

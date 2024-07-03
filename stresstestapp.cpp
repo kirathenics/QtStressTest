@@ -23,6 +23,8 @@ StressTestApp::StressTestApp(QWidget *parent)
 {
     ui->setupUi(this);
 
+    ui->tabWidget->setVisible(false);
+
     // Настройка таблицы логов
     ui->logs_tableWidget->setColumnCount(2);
     QStringList tableHeaders;
@@ -71,18 +73,18 @@ StressTestApp::StressTestApp(QWidget *parent)
 
 
     // Настройка графика загрузки ЦП
-    cpuSeries->setName("CPU Load");
+    cpuSeries->setName("Загрузка ЦП");
 
     cpuChart->addSeries(cpuSeries);
-    cpuChart->setTitle("CPU Load Over Time");
-    cpuChart->legend()->hide();
+    //cpuChart->setTitle("Загрузка процессора с течением времени");
+    //cpuChart->legend()->hide();
 
     axisX->setRange(0, 60);
     axisX->setLabelFormat("%i");
-    axisX->setTitleText("Time (s)");
+    axisX->setTitleText("Время (с)");
 
     axisY->setRange(0, 100);
-    axisY->setTitleText("CPU Load (%)");
+    axisY->setTitleText("Загрузка ЦП (%)");
 
     cpuChart->addAxis(axisX, Qt::AlignBottom);
     cpuChart->addAxis(axisY, Qt::AlignLeft);
@@ -237,7 +239,6 @@ void StressTestApp::on_stop_pushButton_clicked()
 
 void StressTestApp::on_clear_pushButton_clicked()
 {
-    //TODO: clear graphs
     ui->logs_tableWidget->setRowCount(0); // Очищаем таблицу логов
 
     if (ui->start_pushButton->isEnabled()) {
@@ -277,30 +278,6 @@ void StressTestApp::addLogEntry(const QString &action)
     ui->logs_tableWidget->setItem(row, 0, dateTimeItem);
     ui->logs_tableWidget->setItem(row, 1, actionItem);
 }
-
-/*void StressTestApp::setupCpuLoadGraph()
-{
-    ui->cpuLoad_Plot->addGraph();
-    cpuLoadGraph = ui->cpuLoad_Plot->graph(0);
-    cpuLoadGraph->setPen(QPen(Qt::blue));
-    ui->cpuLoad_Plot->xAxis->setLabel("Время, с");
-    ui->cpuLoad_Plot->yAxis->setLabel("Загрузка ЦП (%)");
-    ui->cpuLoad_Plot->yAxis->setRange(0, 100);
-    ui->cpuLoad_Plot->xAxis->setRange(0, 60);
-}
-
-void StressTestApp::updateCpuLoadGraph()
-{
-    double cpuLoad = getCpuLoad();
-    key += 1;
-
-    cpuLoadGraph->addData(key, cpuLoad);
-    //cpuLoadGraph->removeDataBefore(key - 60);
-    cpuLoadGraph->data().clear();
-    ui->cpuLoad_Plot->rescaleAxes();
-    ui->cpuLoad_Plot->replot();
-}*/
-
 
 void StressTestApp::updateCpuLoadGraph()
 {

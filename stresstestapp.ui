@@ -203,9 +203,9 @@
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>330</y>
+      <y>220</y>
       <width>681</width>
-      <height>181</height>
+      <height>291</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="cpuLoadLayout"/>
